@@ -1,15 +1,19 @@
 import Web3Modal from 'web3modal';
+/*
 import Torus from '@toruslabs/torus-embed';
 import Fortmatic from 'fortmatic';
 import Squarelink from 'squarelink';
 import Portis from '@portis/web3';
+*/
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 const httpEndpoint = process.env.REACT_APP_HTTP_ENDPOINT;
 const networkId = process.env.REACT_APP_NETWORK_ID;
+/*
 const squarelinkKey = process.env.REACT_APP_SQUARELINK_API_KEY;
 const fortmaticKey = process.env.REACT_APP_FORTMATIC_API_KEY;
 const portisKey = process.env.REACT_APP_PORTIS_API_KEY;
+*/
 
 const getWeb3Modal = () => {
   return new Web3Modal({
@@ -23,6 +27,7 @@ const getWeb3Modal = () => {
           },
         },
       },
+      /*
       torus: {
         package: Torus, // required
         options: {
@@ -59,6 +64,7 @@ const getWeb3Modal = () => {
           },
         },
       },
+      */
     },
   });
 };

@@ -1,0 +1,9 @@
+// Import mixins
+@import 'assets/styles/mixins.scss';
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/*  ANT DESIGN MENU */
+
+.ant-menu-dark.ant-menu-horizontal {
+  background: $menuBg-darken;
+}

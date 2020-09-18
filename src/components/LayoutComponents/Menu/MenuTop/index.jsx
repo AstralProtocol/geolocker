@@ -161,7 +161,7 @@ const MenuTop = (props) => {
     <div>
       <div className={styles.logo}>
         <div className={styles.logoContainer}>
-          <img src="logo512.png" alt="logo" />
+          <img src="emblem-transparent.png" alt="logo" />
         </div>
       </div>
       <Menu theme="dark" onClick={handleClick} selectedKeys={selectedKeys} mode="horizontal">

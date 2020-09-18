@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import Loadable from 'react-loadable';
 import Loader from 'components/LayoutComponents/Loader/index';
-import MainLayout from 'layouts/Main';
+import MainLayout from 'layouts';
 
 const loadable = (loader) =>
   Loadable({
@@ -21,8 +21,8 @@ const routes = [
   },
   // Home
   {
-    path: '/gravatars',
-    component: loadable(() => import('pages/Gravatars')),
+    path: '/map',
+    component: loadable(() => import('pages/Map')),
   },
 ];
 
@@ -33,7 +33,7 @@ const Router = (props) => {
     <ConnectedRouter history={history}>
       <MainLayout>
         <Switch>
-          <Route exact path="/" render={() => <Redirect to="/gravatars" />} />
+          <Route exact path="/" render={() => <Redirect to="/map" />} />
           {routes.map((route) => (
             <Route
               path={route.path}

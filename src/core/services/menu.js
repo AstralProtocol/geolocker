@@ -1,9 +1,9 @@
 export default function getTopMenuData() {
   return [
     {
-      title: 'Gravatars',
-      key: 'gravatars',
-      url: '/gravatars',
+      title: 'Map',
+      key: 'map',
+      url: '/map',
     },
     {
       title: 'Customization',
