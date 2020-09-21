@@ -7,6 +7,7 @@ const actions = {
   CANCEL_UPDATE_RATE: 'settings/CANCEL_UPDATE_RATE',
   RESTART_RATE_UPDATE: 'settings/RESTART_RATE_UPDATE',
   SWITCH_CONVERSION: 'settings/SWITCH_CONVERSION',
+  SET_MAP_SIZE: 'settings/SET_MAP_SIZE',
 };
 
 export default actions;
@@ -27,6 +28,15 @@ export const changeSetting = (setting, value) => {
     payload: {
       setting,
       value,
+    },
+  };
+};
+
+export const setMapSizea = (mapDimensions) => {
+  return {
+    type: actions.SET_MAP_SIZE,
+    payload: {
+      mapDimensions,
     },
   };
 };

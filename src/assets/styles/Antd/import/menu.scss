@@ -5,5 +5,19 @@
 /*  ANT DESIGN MENU */
 
 .ant-menu-dark.ant-menu-horizontal {
-  background: $menuBg-darken;
+  background: $mainBackground;
+}
+
+.ant-menu-dark.ant-menu-vertical {
+  background: $mainBackground;
+}
+
+.ant-menu-dark.ant-menu-inline {
+  background: $mainBackground;
+}
+
+.ant-menu.ant-menu-dark,
+.ant-menu-dark .ant-menu-sub,
+.ant-menu.ant-menu-dark .ant-menu-sub {
+  background: $mainBackground;
 }

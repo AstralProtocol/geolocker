@@ -24,4 +24,10 @@
 
 .ant-layout-sider {
   transition: all 0.2s;
+  background: $mainBackground;
+}
+
+.ant-layout-sider-trigger {
+  transition: all 0.2s;
+  background: $mainBackground;
 }

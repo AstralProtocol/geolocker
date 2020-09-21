@@ -20,7 +20,6 @@
     margin: 0 auto;
     background-color: $mainBackground;
     @media (max-width: $sm-max-width) {
-      padding: rem(30) rem(10) !important;
       overflow-x: hidden;
     }
   }

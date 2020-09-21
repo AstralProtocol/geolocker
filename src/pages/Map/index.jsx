@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
-
 import useLocation from 'core/hooks/useLocation';
+import { connect } from 'react-redux';
 
-const Map = () => {
+const FullMap = (props) => {
   const location = useLocation();
+
+  const { mapDimensions } = props;
+
+  console.log(mapDimensions);
   const [viewport, setViewport] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: mapDimensions.width,
+    height: mapDimensions.height,
     latitude: 31.9742044,
     longitude: -49.25875,
     zoom: 2,
@@ -17,8 +21,8 @@ const Map = () => {
     const handleResize = () => {
       setViewport({
         ...viewport,
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: mapDimensions.width,
+        height: mapDimensions.height,
       });
     };
     window.addEventListener('resize', handleResize);
@@ -39,7 +43,7 @@ const Map = () => {
 
   return (
     <ReactMapGL
-      mapStyle="mapbox://styles/mapbox/dark-v9"
+      mapStyle="mapbox://styles/j-mars/ckfcepjb09bdg1aqw1novj44h"
       mapboxApiAccessToken={process.env.REACT_APP_MapboxAccessToken}
       // eslint-disable-next-line
       {...viewport}
@@ -59,4 +63,8 @@ const Map = () => {
   );
 };
 
-export default Map;
+const mapStateToProps = (state) => ({
+  mapDimensions: state.settings.mapDimensions,
+});
+
+export default connect(mapStateToProps, null)(FullMap);

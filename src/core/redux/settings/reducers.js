@@ -29,6 +29,10 @@ const initialState = {
     fiatSymbol: '€',
     convertCryptoToFiat: true,
     rate: 0,
+    mapDimensions: {
+      width: '1000px',
+      height: '1000px',
+    },
   }),
 };
 
@@ -50,6 +54,13 @@ export default function userReducer(state = initialState, action) {
       break;
 
     case actions.SET_FIAT_CURRENCY:
+      reduced = {
+        ...state,
+        ...action.payload,
+      };
+      break;
+
+    case actions.SET_MAP_SIZE:
       reduced = {
         ...state,
         ...action.payload,

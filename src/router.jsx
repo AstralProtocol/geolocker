@@ -23,6 +23,7 @@ const routes = [
   {
     path: '/map',
     component: loadable(() => import('pages/Map')),
+    exact: true,
   },
 ];
 
