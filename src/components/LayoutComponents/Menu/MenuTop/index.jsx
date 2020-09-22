@@ -167,7 +167,7 @@ const MenuTop = (props) => {
       <Menu theme="dark" onClick={handleClick} selectedKeys={selectedKeys} mode="horizontal">
         {generateMenuItems()}
         <Menu theme="dark" mode="horizontal" style={{ float: 'right' }}>
-          <Menu.Item key="account">{selectedAccount || 'Not connected'}</Menu.Item>
+          {selectedAccount && <Menu.Item key="account">{selectedAccount}</Menu.Item>}
           <Menu.Item key="userArea">{userArea}</Menu.Item>
         </Menu>
       </Menu>

@@ -24,7 +24,7 @@ const Login = (props) => {
   } else if (loading && registered) {
     text = 'Fetching';
   } else {
-    text = 'Sign in';
+    text = 'Connect to a wallet';
   }
   return (
     <div className={styles.loginButton}>

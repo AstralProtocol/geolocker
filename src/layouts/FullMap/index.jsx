@@ -1,9 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
-import { connect } from 'react-redux';
 import MenuTop from 'components/LayoutComponents/Menu/MenuTop';
 import MenuSide from 'components/LayoutComponents/Menu/MenuSide';
-import { setMapSizea } from 'core/redux/settings/actions';
 
 const { Content } = Layout;
 
@@ -21,8 +19,4 @@ const FullMapLayout = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatchSetMapSize: (dimensions) => dispatch(setMapSizea(dimensions)),
-});
-
-export default connect(null, mapDispatchToProps)(FullMapLayout);
+export default FullMapLayout;

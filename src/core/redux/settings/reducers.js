@@ -29,10 +29,9 @@ const initialState = {
     fiatSymbol: '€',
     convertCryptoToFiat: true,
     rate: 0,
-    mapDimensions: {
-      width: '1000px',
-      height: '1000px',
-    },
+    collapsed: true,
+    initialMapLoad: true,
+    siderWidth: 0,
   }),
 };
 
@@ -60,10 +59,11 @@ export default function userReducer(state = initialState, action) {
       };
       break;
 
-    case actions.SET_MAP_SIZE:
+    case actions.SET_COLLAPSED_SIDER:
       reduced = {
         ...state,
         ...action.payload,
+        initialMapLoad: false,
       };
       break;
 

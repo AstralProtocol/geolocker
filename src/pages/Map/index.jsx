@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
+import { connect } from 'react-redux';
 import useLocation from 'core/hooks/useLocation';
+import Emoji from 'components/Emoji';
 
-const FullMap = () => {
+const Map = (props) => {
+  const { collapsed, initialMapLoad, siderWidth } = props;
+
   const location = useLocation();
 
   const parentRef = useRef(null);
@@ -15,6 +19,7 @@ const FullMap = () => {
 
   useEffect(() => {
     if (parentRef.current) {
+      console.log(0);
       setViewport({
         ...viewport,
         width: parentRef.current.offsetWidth,
@@ -24,7 +29,18 @@ const FullMap = () => {
   }, [parentRef]);
 
   useEffect(() => {
+    if (!initialMapLoad && collapsed) {
+      setViewport({
+        ...viewport,
+        width: parentRef.current.offsetWidth + siderWidth - 80,
+        height: parentRef.current.offsetHeight,
+      });
+    }
+  }, [initialMapLoad, collapsed]);
+
+  useEffect(() => {
     const handleResize = () => {
+      console.log(2);
       setViewport({
         ...viewport,
         width: parentRef.current.offsetWidth,
@@ -68,7 +84,9 @@ const FullMap = () => {
             offsetLeft={-20}
             offsetTop={-10}
           >
-            <span style={{ fontSize: `${viewport.zoom * 0.5}rem` }}>BOOM</span>
+            <span style={{ fontSize: `${viewport.zoom * 0.5}rem` }}>
+              <Emoji symbol="🚀" />
+            </span>
           </Marker>
         ) : null}
       </ReactMapGL>
@@ -76,4 +94,10 @@ const FullMap = () => {
   );
 };
 
-export default FullMap;
+const mapStateToProps = (state) => ({
+  collapsed: state.settings.collapsed,
+  initialMapLoad: state.settings.initialMapLoad,
+  siderWidth: state.settings.siderWidth,
+});
+
+export default connect(mapStateToProps, null)(Map);
