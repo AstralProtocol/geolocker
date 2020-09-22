@@ -1,28 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import useLocation from 'core/hooks/useLocation';
-import { connect } from 'react-redux';
 
-const FullMap = (props) => {
+const FullMap = () => {
   const location = useLocation();
 
-  const { mapDimensions } = props;
+  const parentRef = useRef(null);
 
-  console.log(mapDimensions);
   const [viewport, setViewport] = useState({
-    width: mapDimensions.width,
-    height: mapDimensions.height,
     latitude: 31.9742044,
     longitude: -49.25875,
     zoom: 2,
   });
 
   useEffect(() => {
+    if (parentRef.current) {
+      setViewport({
+        ...viewport,
+        width: parentRef.current.offsetWidth,
+        height: parentRef.current.offsetHeight,
+      });
+    }
+  }, [parentRef]);
+
+  useEffect(() => {
     const handleResize = () => {
       setViewport({
         ...viewport,
-        width: mapDimensions.width,
-        height: mapDimensions.height,
+        width: parentRef.current.offsetWidth,
+        height: parentRef.current.offsetHeight,
       });
     };
     window.addEventListener('resize', handleResize);
@@ -42,29 +48,32 @@ const FullMap = (props) => {
   }, [location, setViewport]);
 
   return (
-    <ReactMapGL
-      mapStyle="mapbox://styles/j-mars/ckfcepjb09bdg1aqw1novj44h"
-      mapboxApiAccessToken={process.env.REACT_APP_MapboxAccessToken}
-      // eslint-disable-next-line
-      {...viewport}
-      onViewportChange={(vp) => setViewport(vp)}
+    <div
+      style={{
+        height: '100%',
+      }}
+      ref={parentRef}
     >
-      {location ? (
-        <Marker
-          latitude={location.latitude}
-          longitude={location.longitude}
-          offsetLeft={-20}
-          offsetTop={-10}
-        >
-          <span style={{ fontSize: `${viewport.zoom * 0.5}rem` }}>BOOM</span>
-        </Marker>
-      ) : null}
-    </ReactMapGL>
+      <ReactMapGL
+        mapStyle="mapbox://styles/j-mars/ckfcepjb09bdg1aqw1novj44h"
+        mapboxApiAccessToken={process.env.REACT_APP_MapboxAccessToken}
+        // eslint-disable-next-line
+        {...viewport}
+        onViewportChange={(vp) => setViewport(vp)}
+      >
+        {location ? (
+          <Marker
+            latitude={location.latitude}
+            longitude={location.longitude}
+            offsetLeft={-20}
+            offsetTop={-10}
+          >
+            <span style={{ fontSize: `${viewport.zoom * 0.5}rem` }}>BOOM</span>
+          </Marker>
+        ) : null}
+      </ReactMapGL>
+    </div>
   );
 };
 
-const mapStateToProps = (state) => ({
-  mapDimensions: state.settings.mapDimensions,
-});
-
-export default connect(mapStateToProps, null)(FullMap);
+export default FullMap;
