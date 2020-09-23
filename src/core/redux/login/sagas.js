@@ -67,8 +67,10 @@ function* INIT_WEB3_SAGA() {
   });
 
   const web3Modal = yield call(getWeb3Modal);
+  console.log(web3Modal);
 
   const provider = yield call(web3Modal.connect);
+  console.log(provider);
 
   const web3 = new Web3(provider);
 
@@ -85,6 +87,12 @@ function* INIT_WEB3_SAGA() {
       end2endLoadingIndicator: false,
       isLoggedIn: true,
     },
+  });
+
+  notification.info({
+    message: 'You may now interact with the dApp',
+    description: 'Logging out',
+    placement: 'bottomRight',
   });
 
   if (web3Modal.cachedProvider === 'injected') {

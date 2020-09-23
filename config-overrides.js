@@ -1,6 +1,14 @@
 // eslint-disable-next-line
-const { override, addBabelPlugin, addWebpackAlias, fixBabelImports, addLessLoader, useEslintRc  } = require('customize-cra');
+const {
+  override,
+  addBabelPlugin,
+  addWebpackAlias,
+  fixBabelImports,
+  addLessLoader,
+  useEslintRc,
+} = require('customize-cra');
 const path = require('path');
+const { getThemeVariables } = require('antd/dist/theme');
 
 module.exports = override(
   addBabelPlugin('react-hot-loader/babel'),
@@ -16,7 +24,9 @@ module.exports = override(
   addLessLoader({
     lessOptions: {
       javascriptEnabled: true,
-      modifyVars: { '@primary-color': '#0c0c1b' },
+      modifyVars: getThemeVariables({
+        dark: true,
+      }),
     },
   }),
 );

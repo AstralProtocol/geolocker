@@ -15,8 +15,8 @@ const loadable = (loader) =>
 const routes = [
   // Feed
   {
-    path: '/customization',
-    component: loadable(() => import('pages/Customization')),
+    path: '/browser',
+    component: loadable(() => import('pages/Browser')),
     exact: true,
   },
   // Home

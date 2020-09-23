@@ -6,9 +6,9 @@ export default function getTopMenuData() {
       url: '/map',
     },
     {
-      title: 'Customization',
-      key: 'customization',
-      url: '/customization',
+      title: 'Browser',
+      key: 'browser',
+      url: '/browser',
     },
   ];
 }

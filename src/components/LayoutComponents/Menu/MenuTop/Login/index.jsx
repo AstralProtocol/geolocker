@@ -5,20 +5,12 @@ import { changeAuthorization } from 'core/redux/login/actions';
 import styles from './style.module.scss';
 
 const Login = (props) => {
-  const {
-    loading,
-    changeAuthorizationProps,
-    initializingWeb3,
-    isFetchingThreeBox,
-    registered,
-  } = props;
+  const { loading, changeAuthorizationProps, initializingWeb3, registered } = props;
 
   let text;
 
   if (initializingWeb3 && !registered) {
     text = 'Connecting';
-  } else if (isFetchingThreeBox) {
-    text = 'Opening 3Box';
   } else if (loading && !registered) {
     text = 'Registering';
   } else if (loading && registered) {
@@ -39,7 +31,6 @@ const mapStateToProps = (state) => ({
   registered: state.login.registered,
   loading: state.login.end2endLoadingIndicator,
   initializingWeb3: state.login.initializingWeb3,
-  isFetchingThreeBox: state.login.isFetchingThreeBox,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -6,6 +6,7 @@ import store from 'store';
 import _ from 'lodash';
 import { fetchMenu } from 'core/redux/menu/actions';
 import { logout } from 'core/redux/login/actions';
+import utils from 'utils';
 import Login from './Login';
 import styles from './style.module.scss';
 
@@ -167,7 +168,9 @@ const MenuTop = (props) => {
       <Menu theme="dark" onClick={handleClick} selectedKeys={selectedKeys} mode="horizontal">
         {generateMenuItems()}
         <Menu theme="dark" mode="horizontal" style={{ float: 'right' }}>
-          {selectedAccount && <Menu.Item key="account">{selectedAccount}</Menu.Item>}
+          {selectedAccount && (
+            <Menu.Item key="account">{utils.getShortAddress(selectedAccount)}</Menu.Item>
+          )}
           <Menu.Item key="userArea">{userArea}</Menu.Item>
         </Menu>
       </Menu>
