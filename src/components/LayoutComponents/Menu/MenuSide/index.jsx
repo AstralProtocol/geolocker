@@ -20,21 +20,6 @@ const { Sider } = Layout;
 const { SubMenu } = Menu;
 const { Dragger } = Upload;
 
-const draggerProps = {
-  name: 'file',
-  multiple: false,
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
 const OPEN_KEYS = ['1', 'sub1', 'sub2', 'sub3'];
 
 const MenuSide = (props) => {
@@ -43,8 +28,38 @@ const MenuSide = (props) => {
   const now = moment();
 
   const parentRef = useRef(null);
-
   const [openKeys, setOpenKeys] = useState(OPEN_KEYS);
+  const [fileList, setFileList] = useState([]);
+
+  const draggerProps = {
+    accept: 'application/JSON',
+    name: 'file',
+    multiple: false,
+    beforeUpload() {
+      return false;
+    },
+    onChange(info) {
+      const { fileList: fL } = info;
+      let newFileList = fL;
+      console.log(fL);
+      // 1. Limit the number of uploaded files
+      // Only to show two recent uploaded files, and old ones will be replaced by the new
+
+      const filtered = newFileList.filter((f) => {
+        if (f.type !== 'application/json') {
+          message.info('This box only accepts json formats');
+        }
+        return f.type === 'application/json';
+      });
+      //  .map((f, idx) => newFileList.splice(idx, 1));
+      console.log(filtered);
+
+      newFileList = filtered.slice(-1);
+
+      console.log(newFileList);
+      setFileList(newFileList);
+    },
+  };
 
   const onOpenChange = (okeys) => setOpenKeys([...OPEN_KEYS, ...okeys]);
 
@@ -60,12 +75,10 @@ const MenuSide = (props) => {
 
   useEffect(
     function openSideBar() {
-      const siderWidth = parentRef.current.offsetWidth;
-
       if (isLoggedIn) {
+        const siderWidth = parentRef.current.offsetWidth;
+
         dispatchSetSiderCollapse(false, siderWidth);
-      } else {
-        dispatchSetSiderCollapse(true, siderWidth);
       }
     },
     [isLoggedIn],
@@ -94,7 +107,7 @@ const MenuSide = (props) => {
                 {
                   // eslint-disable-next-line
                 }
-                <Dragger {...draggerProps}>
+                <Dragger {...draggerProps} fileList={fileList}>
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                   </p>
@@ -110,13 +123,8 @@ const MenuSide = (props) => {
                 </Row>
                 <Divider orientation="left" />
                 <Row>
-                  <Col span={12} offset={3}>
-                    Pick geoJSON date:
-                  </Col>
-                </Row>
-
-                <Row>
-                  <Col span={12} offset={3}>
+                  <Col span={20} offset={3}>
+                    geoJSON timestamp:{'    '}
                     <DatePicker
                       id="cT"
                       format="YYYY-MM-DD HH:mm"
@@ -124,7 +132,7 @@ const MenuSide = (props) => {
                         defaultValue: now,
                         format: 'HH:mm',
                       }}
-                    />{' '}
+                    />
                   </Col>
                 </Row>
               </SubMenu>

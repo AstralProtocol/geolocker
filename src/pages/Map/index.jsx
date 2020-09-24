@@ -19,7 +19,6 @@ const Map = (props) => {
 
   useEffect(() => {
     if (parentRef.current) {
-      console.log(0);
       setViewport({
         ...viewport,
         width: parentRef.current.offsetWidth,
@@ -40,7 +39,6 @@ const Map = (props) => {
 
   useEffect(() => {
     const handleResize = () => {
-      console.log(2);
       setViewport({
         ...viewport,
         width: parentRef.current.offsetWidth,
