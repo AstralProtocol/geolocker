@@ -1,5 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { InboxOutlined, DatabaseOutlined } from '@ant-design/icons';
+import {
+  InboxOutlined,
+  DatabaseOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  ClockCircleOutlined,
+} from '@ant-design/icons';
 import {
   Layout,
   Menu,
@@ -11,10 +17,12 @@ import {
   Row,
   Col,
   Divider,
+  Tag,
 } from 'antd';
 import { connect } from 'react-redux';
 import { setSiderCollapse } from 'core/redux/settings/actions';
 import moment from 'moment';
+import geojsonhint from '@mapbox/geojsonhint';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -30,18 +38,28 @@ const MenuSide = (props) => {
   const parentRef = useRef(null);
   const [openKeys, setOpenKeys] = useState(OPEN_KEYS);
   const [fileList, setFileList] = useState([]);
+  const [validGeoJSON, setValidGeoJSON] = useState(false);
 
   const draggerProps = {
     accept: 'application/JSON',
     name: 'file',
     multiple: false,
-    beforeUpload() {
+    beforeUpload(file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const hintResult = geojsonhint.hint(e.target.result);
+        if (hintResult !== undefined && hintResult.length === 0) {
+          setValidGeoJSON(true);
+        }
+      };
+      reader.readAsText(file);
+
       return false;
     },
     onChange(info) {
       const { fileList: fL } = info;
       let newFileList = fL;
-      console.log(fL);
       // 1. Limit the number of uploaded files
       // Only to show two recent uploaded files, and old ones will be replaced by the new
 
@@ -51,16 +69,18 @@ const MenuSide = (props) => {
         }
         return f.type === 'application/json';
       });
-      //  .map((f, idx) => newFileList.splice(idx, 1));
-      console.log(filtered);
 
       newFileList = filtered.slice(-1);
 
-      console.log(newFileList);
+      if (newFileList !== undefined && newFileList.length === 0) {
+        setValidGeoJSON(false);
+      }
+
       setFileList(newFileList);
     },
   };
 
+  console.log(validGeoJSON);
   const onOpenChange = (okeys) => setOpenKeys([...OPEN_KEYS, ...okeys]);
 
   const onCollapse = (c) => {
@@ -83,6 +103,28 @@ const MenuSide = (props) => {
     },
     [isLoggedIn],
   );
+
+  let validationTag;
+
+  if (validGeoJSON && fileList.length > 0) {
+    validationTag = (
+      <Tag icon={<CheckCircleOutlined />} color="success">
+        Valid geoJSON file
+      </Tag>
+    );
+  } else if (!validGeoJSON && fileList.length > 0) {
+    validationTag = (
+      <Tag icon={<CloseCircleOutlined />} color="error">
+        Invalid geoJSON file
+      </Tag>
+    );
+  } else if (fileList.length === 0) {
+    validationTag = (
+      <Tag icon={<ClockCircleOutlined />} color="default">
+        Waiting for a file
+      </Tag>
+    );
+  }
 
   return (
     <div ref={parentRef}>
@@ -118,7 +160,7 @@ const MenuSide = (props) => {
               <SubMenu key="sub2" icon={<DatabaseOutlined />} title="Loaded File Status">
                 <Row>
                   <Col span={12} offset={3}>
-                    <Descriptions.Item>Validated: Yes</Descriptions.Item>
+                    <Descriptions.Item>{validationTag}</Descriptions.Item>
                   </Col>
                 </Row>
                 <Divider orientation="left" />
