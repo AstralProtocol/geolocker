@@ -7,6 +7,7 @@ import login from 'core/redux/login/reducers';
 import menu from 'core/redux/menu/reducers';
 import modals from 'core/redux/modals/reducers';
 import settings from 'core/redux/settings/reducers';
+import spatialAssets from 'core/redux/spatial-assets/reducers';
 import { actions } from 'core/redux/login/actions';
 
 export const history = createHashHistory();
@@ -19,6 +20,7 @@ const appReducer = combineReducers({
   modals,
   router: connectRouter(history),
   settings,
+  spatialAssets,
 });
 
 export default (state, action) => {

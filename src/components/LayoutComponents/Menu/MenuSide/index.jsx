@@ -21,8 +21,9 @@ import {
 } from 'antd';
 import { connect } from 'react-redux';
 import { setSiderCollapse } from 'core/redux/settings/actions';
+import { setSpatialAsset } from 'core/redux/spatial-assets/actions';
+
 import moment from 'moment';
-import geojsonhint from '@mapbox/geojsonhint';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -31,14 +32,14 @@ const { Dragger } = Upload;
 const OPEN_KEYS = ['1', 'sub1', 'sub2', 'sub3'];
 
 const MenuSide = (props) => {
-  const { collapsed, dispatchSetSiderCollapse, isLoggedIn } = props;
+  const { collapsed, dispatchSetSiderCollapse, isLoggedIn, dispatchSetSpatialAsset } = props;
 
   const now = moment();
 
   const parentRef = useRef(null);
   const [openKeys, setOpenKeys] = useState(OPEN_KEYS);
   const [fileList, setFileList] = useState([]);
-  const [validGeoJSON, setValidGeoJSON] = useState(false);
+  const [validStacItem, setValidStacItem] = useState(false);
 
   const draggerProps = {
     accept: 'application/JSON',
@@ -46,12 +47,10 @@ const MenuSide = (props) => {
     multiple: false,
     beforeUpload(file) {
       const reader = new FileReader();
-
       reader.onload = (e) => {
-        const hintResult = geojsonhint.hint(e.target.result);
-        if (hintResult !== undefined && hintResult.length === 0) {
-          setValidGeoJSON(true);
-        }
+        console.log(e.target.result);
+        setValidStacItem(true);
+        dispatchSetSpatialAsset(JSON.parse(e.target.result), true);
       };
       reader.readAsText(file);
 
@@ -73,14 +72,15 @@ const MenuSide = (props) => {
       newFileList = filtered.slice(-1);
 
       if (newFileList !== undefined && newFileList.length === 0) {
-        setValidGeoJSON(false);
+        setValidStacItem(false);
+        dispatchSetSpatialAsset({}, false);
       }
 
       setFileList(newFileList);
     },
   };
 
-  console.log(validGeoJSON);
+  console.log(validStacItem);
   const onOpenChange = (okeys) => setOpenKeys([...OPEN_KEYS, ...okeys]);
 
   const onCollapse = (c) => {
@@ -106,22 +106,22 @@ const MenuSide = (props) => {
 
   let validationTag;
 
-  if (validGeoJSON && fileList.length > 0) {
+  if (validStacItem && fileList.length > 0) {
     validationTag = (
       <Tag icon={<CheckCircleOutlined />} color="success">
-        Valid geoJSON file
+        Valid Stac Item
       </Tag>
     );
-  } else if (!validGeoJSON && fileList.length > 0) {
+  } else if (!validStacItem && fileList.length > 0) {
     validationTag = (
       <Tag icon={<CloseCircleOutlined />} color="error">
-        Invalid geoJSON file
+        Invalid Stac Item
       </Tag>
     );
   } else if (fileList.length === 0) {
     validationTag = (
       <Tag icon={<ClockCircleOutlined />} color="default">
-        Waiting for a file
+        Waiting for a Stac Item
       </Tag>
     );
   }
@@ -197,6 +197,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   dispatchSetSiderCollapse: (collapsed, siderWidth) =>
     dispatch(setSiderCollapse(collapsed, siderWidth)),
+  dispatchSetSpatialAsset: (spatialAsset, spatialAssetLoaded) =>
+    dispatch(setSpatialAsset(spatialAsset, spatialAssetLoaded)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuSide);
