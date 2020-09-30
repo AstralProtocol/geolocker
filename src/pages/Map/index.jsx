@@ -10,19 +10,21 @@ import { connect } from 'react-redux';
 import useLocation from 'core/hooks/useLocation';
 import Emoji from 'components/Emoji';
 import { easeCubic } from 'd3-ease';
+import axios from 'axios';
+
+const regex = /(?:\.([^.]+))?$/;
 
 const Map = (props) => {
   const { collapsed, initialMapLoad, siderWidth, spatialAsset, spatialAssetLoaded } = props;
-
   const location = useLocation();
-
   const parentRef = useRef(null);
-
   const [viewport, setViewport] = useState({
     latitude: 31.9742044,
     longitude: -49.25875,
     zoom: 2,
   });
+  const [hoveredState, setHoveredState] = useState({ hoveredFeature: null });
+  const [loadedTileJson, setLoadedTileJson] = useState(null);
 
   useEffect(() => {
     if (parentRef.current) {
@@ -92,18 +94,47 @@ const Map = (props) => {
   };
 
   useEffect(() => {
-    if (spatialAssetLoaded && spatialAsset) {
-      onStacDataLoad(spatialAsset);
+    async function loadSpatialAsset() {
+      if (spatialAssetLoaded && spatialAsset) {
+        onStacDataLoad(spatialAsset);
+
+        const cogsUrl = Object.values(spatialAsset.assets).reduce((newData, asset) => {
+          if (regex.exec(asset.href)[1] === 'tif') {
+            newData.push(asset.href);
+          }
+          return newData;
+        }, []);
+
+        const response = await axios.get(`http://tiles.rdnt.io/tiles?url=${cogsUrl && cogsUrl[0]}`);
+
+        if (response.status === 200) {
+          setLoadedTileJson(response.data);
+        } else {
+          setLoadedTileJson(null);
+        }
+      }
     }
+    loadSpatialAsset();
   }, [spatialAsset]);
 
   const dataLayer = {
     id: 'dataLayer',
-    source: 'stacItem',
+    source: 'geojson',
     type: 'fill',
     paint: { 'fill-color': '#228b22', 'fill-opacity': 0.4 },
   };
 
+  const onHover = (event) => {
+    const {
+      features,
+      srcEvent: { offsetX, offsetY },
+    } = event;
+    const hoveredFeature = features && features.find((f) => f.layer.id === 'data');
+
+    setHoveredState({ hoveredFeature, x: offsetX, y: offsetY });
+  };
+
+  console.log(loadedTileJson);
   return (
     <div
       style={{
@@ -117,12 +148,33 @@ const Map = (props) => {
         // eslint-disable-next-line
         {...viewport}
         onViewportChange={(vp) => setViewport(vp)}
+        onHover={onHover}
       >
-        <Source id="stacItem" type="geojson" data={spatialAssetLoaded && spatialAsset.geometry} />
-        <Layer
-          // eslint-disable-next-line
-          {...dataLayer}
-        />
+        <Source id="geojson" type="geojson" data={spatialAssetLoaded && spatialAsset.geometry}>
+          <Layer
+            // eslint-disable-next-line
+            {...dataLayer}
+          />
+        </Source>
+        {loadedTileJson && (
+          <Source id="tiffjson" type="raster" tiles={loadedTileJson.tiles}>
+            <Layer id="tiffjson" type="raster" />
+          </Source>
+        )}
+
+        {hoveredState.hoveredFeature && (
+          <div
+            className="tooltip"
+            style={{
+              left: hoveredState.x,
+              top: hoveredState.y,
+            }}
+          >
+            <div>State: {hoveredState.hoveredFeature.properties.name}</div>
+            <div>#Events: {hoveredState.hoveredFeature.properties.value}</div>
+          </div>
+        )}
+
         {location ? (
           <Marker
             latitude={location.latitude}

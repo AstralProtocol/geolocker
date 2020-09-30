@@ -48,7 +48,6 @@ const MenuSide = (props) => {
     beforeUpload(file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        console.log(e.target.result);
         setValidStacItem(true);
         dispatchSetSpatialAsset(JSON.parse(e.target.result), true);
       };
@@ -80,7 +79,6 @@ const MenuSide = (props) => {
     },
   };
 
-  console.log(validStacItem);
   const onOpenChange = (okeys) => setOpenKeys([...OPEN_KEYS, ...okeys]);
 
   const onCollapse = (c) => {
@@ -153,7 +151,7 @@ const MenuSide = (props) => {
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                   </p>
-                  <p className="ant-upload-text">Drag and drop a geoJSON file to this area</p>
+                  <p className="ant-upload-text">Drag and drop a STAC Item to this area</p>
                   <p className="ant-upload-hint">It will be loaded into your browser</p>
                 </Dragger>
               </SubMenu>
