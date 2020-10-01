@@ -1,14 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import ReactMapGL, {
-  Marker,
-  Source,
-  Layer,
-  FlyToInterpolator,
-  WebMercatorViewport,
-} from 'react-map-gl';
+import ReactMapGL, { Source, Layer, FlyToInterpolator, WebMercatorViewport } from 'react-map-gl';
 import { connect } from 'react-redux';
-import useLocation from 'core/hooks/useLocation';
-import Emoji from 'components/Emoji';
 import { easeCubic } from 'd3-ease';
 import axios from 'axios';
 
@@ -16,15 +8,47 @@ const regex = /(?:\.([^.]+))?$/;
 
 const Map = (props) => {
   const { collapsed, initialMapLoad, siderWidth, spatialAsset, spatialAssetLoaded } = props;
-  const location = useLocation();
   const parentRef = useRef(null);
   const [viewport, setViewport] = useState({
-    latitude: 31.9742044,
-    longitude: -49.25875,
+    latitude: 30,
+    longitude: 0,
     zoom: 2,
   });
-  const [hoveredState, setHoveredState] = useState({ hoveredFeature: null });
   const [loadedTileJson, setLoadedTileJson] = useState(null);
+  const onStacDataLoad = (sAsset = null) => {
+    if (sAsset) {
+      const { longitude, latitude, zoom } = new WebMercatorViewport(viewport).fitBounds(
+        [
+          [sAsset.bbox[0], sAsset.bbox[1]],
+          [sAsset.bbox[2], sAsset.bbox[3]],
+        ],
+        {
+          padding: 20,
+          offset: [0, -100],
+        },
+      );
+
+      setViewport({
+        ...viewport,
+        longitude,
+        latitude,
+        zoom,
+        transitionDuration: 2000,
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionEasing: easeCubic,
+      });
+    } else {
+      setViewport({
+        ...viewport,
+        latitude: 30,
+        longitude: 0,
+        zoom: 2,
+        transitionDuration: 2000,
+        transitionInterpolator: new FlyToInterpolator(),
+        transitionEasing: easeCubic,
+      });
+    }
+  };
 
   useEffect(() => {
     if (parentRef.current) {
@@ -61,43 +85,8 @@ const Map = (props) => {
   });
 
   useEffect(() => {
-    if (location) {
-      setViewport((vp) => ({
-        ...vp,
-        ...location,
-        zoom: 8,
-      }));
-    }
-  }, [location, setViewport]);
-
-  const onStacDataLoad = (sAsset) => {
-    const { longitude, latitude, zoom } = new WebMercatorViewport(viewport).fitBounds(
-      [
-        [sAsset.bbox[0], sAsset.bbox[1]],
-        [sAsset.bbox[2], sAsset.bbox[3]],
-      ],
-      {
-        padding: 20,
-        offset: [0, -100],
-      },
-    );
-
-    setViewport({
-      ...viewport,
-      longitude,
-      latitude,
-      zoom,
-      transitionDuration: 2000,
-      transitionInterpolator: new FlyToInterpolator(),
-      transitionEasing: easeCubic,
-    });
-  };
-
-  useEffect(() => {
     async function loadSpatialAsset() {
       if (spatialAssetLoaded && spatialAsset) {
-        onStacDataLoad(spatialAsset);
-
         const cogsUrl = Object.values(spatialAsset.assets).reduce((newData, asset) => {
           if (regex.exec(asset.href)[1] === 'tif') {
             newData.push(asset.href);
@@ -109,13 +98,17 @@ const Map = (props) => {
 
         if (response.status === 200) {
           setLoadedTileJson(response.data);
+          onStacDataLoad(spatialAsset);
         } else {
           setLoadedTileJson(null);
         }
+      } else if (!initialMapLoad) {
+        onStacDataLoad(null);
+        setLoadedTileJson(null);
       }
     }
     loadSpatialAsset();
-  }, [spatialAsset]);
+  }, [spatialAsset, initialMapLoad]);
 
   const dataLayer = {
     id: 'dataLayer',
@@ -124,17 +117,6 @@ const Map = (props) => {
     paint: { 'fill-color': '#228b22', 'fill-opacity': 0.4 },
   };
 
-  const onHover = (event) => {
-    const {
-      features,
-      srcEvent: { offsetX, offsetY },
-    } = event;
-    const hoveredFeature = features && features.find((f) => f.layer.id === 'data');
-
-    setHoveredState({ hoveredFeature, x: offsetX, y: offsetY });
-  };
-
-  console.log(loadedTileJson);
   return (
     <div
       style={{
@@ -148,45 +130,23 @@ const Map = (props) => {
         // eslint-disable-next-line
         {...viewport}
         onViewportChange={(vp) => setViewport(vp)}
-        onHover={onHover}
       >
-        <Source id="geojson" type="geojson" data={spatialAssetLoaded && spatialAsset.geometry}>
-          <Layer
-            // eslint-disable-next-line
-            {...dataLayer}
-          />
-        </Source>
-        {loadedTileJson && (
-          <Source id="tiffjson" type="raster" tiles={loadedTileJson.tiles}>
-            <Layer id="tiffjson" type="raster" />
+        {spatialAssetLoaded && (
+          <Source id="geojson" type="geojson" data={spatialAsset.geometry}>
+            <Layer
+              // eslint-disable-next-line
+              {...dataLayer}
+            />
           </Source>
         )}
 
-        {hoveredState.hoveredFeature && (
-          <div
-            className="tooltip"
-            style={{
-              left: hoveredState.x,
-              top: hoveredState.y,
-            }}
-          >
-            <div>State: {hoveredState.hoveredFeature.properties.name}</div>
-            <div>#Events: {hoveredState.hoveredFeature.properties.value}</div>
-          </div>
+        {loadedTileJson && (
+          <>
+            <Source id="tiffjson" type="raster" tiles={loadedTileJson.tiles}>
+              <Layer id="tiffjson" type="raster" />
+            </Source>
+          </>
         )}
-
-        {location ? (
-          <Marker
-            latitude={location.latitude}
-            longitude={location.longitude}
-            offsetLeft={-20}
-            offsetTop={-10}
-          >
-            <span style={{ fontSize: `${viewport.zoom * 0.5}rem` }}>
-              <Emoji symbol="🚀" />
-            </span>
-          </Marker>
-        ) : null}
       </ReactMapGL>
     </div>
   );

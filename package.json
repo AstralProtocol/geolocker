@@ -103,7 +103,6 @@
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.18.0"
   },
-  "proxy": "http://localhost:4000",
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx,scss,less}": [
       "prettier --write",
