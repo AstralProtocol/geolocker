@@ -3,7 +3,8 @@ import { actions } from './actions';
 const initialState = {
   spatialAsset: null,
   spatialAssetLoaded: false,
-  loadedCogs: [],
+  loadedCogs: null,
+  loadedTiffJson: [],
   selectedCog: null,
 };
 
@@ -17,7 +18,7 @@ export default function spatialAssetsReducer(state = initialState, action) {
       };
       break;
 
-    case actions.SET_LOADED_COGS:
+    case actions.COGS_LOADED:
       reduced = {
         ...state,
         ...action.payload,

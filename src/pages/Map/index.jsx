@@ -3,7 +3,7 @@ import ReactMapGL, { Source, Layer, FlyToInterpolator, WebMercatorViewport } fro
 import { connect } from 'react-redux';
 import { easeCubic } from 'd3-ease';
 import axios from 'axios';
-import { setLoadedCogs, setSelectedCog } from 'core/redux/spatial-assets/actions';
+import { loadCogs, setSelectedCog } from 'core/redux/spatial-assets/actions';
 
 const regex = /(?:\.([^.]+))?$/;
 
@@ -14,7 +14,7 @@ const Map = (props) => {
     siderWidth,
     spatialAsset,
     spatialAssetLoaded,
-    dispatchSetLoadedCogs,
+    dispatchLoadCogs,
     loadedCogs,
     selectedCog,
     dispatchSetSelectedCog,
@@ -97,6 +97,9 @@ const Map = (props) => {
   });
 
   useEffect(() => {
+    console.log(spatialAssetLoaded);
+    console.log(spatialAsset);
+    console.log(initialMapLoad);
     if (spatialAssetLoaded && spatialAsset) {
       const cogs = Object.values(spatialAsset.assets).reduce((newData, asset) => {
         if (regex.exec(asset.href)[1] === 'tif') {
@@ -105,15 +108,14 @@ const Map = (props) => {
         return newData;
       }, []);
 
-      dispatchSetLoadedCogs(cogs);
-      dispatchSetSelectedCog(cogs[0]);
+      if (cogs) {
+        dispatchLoadCogs(cogs);
+        dispatchSetSelectedCog(cogs[0]);
+      }
     } else if (!initialMapLoad) {
-      dispatchSetLoadedCogs([]);
       onStacDataLoad(null);
-      setLoadedTileJson(null);
-      dispatchSetSelectedCog(null);
     }
-  }, [spatialAsset, initialMapLoad, dispatchSetLoadedCogs]);
+  }, [spatialAsset, initialMapLoad, dispatchLoadCogs]);
 
   useEffect(() => {
     async function loadTileJson() {
@@ -180,7 +182,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchSetLoadedCogs: (loadedCogs) => dispatch(setLoadedCogs(loadedCogs)),
+  dispatchLoadCogs: (loadedCogs) => dispatch(loadCogs(loadedCogs)),
   dispatchSetSelectedCog: (selectedCog) => dispatch(setSelectedCog(selectedCog)),
 });
 

@@ -7,6 +7,7 @@ const actions = {
   CANCEL_UPDATE_RATE: 'settings/CANCEL_UPDATE_RATE',
   RESTART_RATE_UPDATE: 'settings/RESTART_RATE_UPDATE',
   SWITCH_CONVERSION: 'settings/SWITCH_CONVERSION',
+  SET_INITIAL_MAP_LOAD: 'settings/SET_INITIAL_MAP_LOAD',
   SET_COLLAPSED_SIDER: 'settings/SET_COLLAPSED_SIDER',
 };
 
@@ -28,6 +29,15 @@ export const changeSetting = (setting, value) => {
     payload: {
       setting,
       value,
+    },
+  };
+};
+
+export const setInitialMapLoad = (initialMapLoaded) => {
+  return {
+    type: actions.SET_INITIAL_MAP_LOAD,
+    payload: {
+      initialMapLoaded,
     },
   };
 };

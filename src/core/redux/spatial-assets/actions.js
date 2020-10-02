@@ -1,6 +1,7 @@
 export const actions = {
   SET_SPATIAL_ASSET: 'spatial-assets/SET_SPATIAL_ASSET',
-  SET_LOADED_COGS: 'spatial-assets/SET_LOADED_COGS',
+  LOAD_COGS: 'spatial-assets/LOAD_COGS',
+  COGS_LOADED: 'spatial-assets/COGS-LOADED',
   SET_SELECTED_COG: 'spatial-assets/SET_SELECTED_COG',
 };
 
@@ -14,9 +15,9 @@ export const setSpatialAsset = (spatialAsset, spatialAssetLoaded) => {
   };
 };
 
-export const setLoadedCogs = (loadedCogs) => {
+export const loadCogs = (loadedCogs) => {
   return {
-    type: actions.SET_LOADED_COGS,
+    type: actions.LOAD_COGS,
     payload: {
       loadedCogs,
     },

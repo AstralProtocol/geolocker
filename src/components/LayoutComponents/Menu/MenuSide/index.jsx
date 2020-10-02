@@ -6,19 +6,7 @@ import {
   CloseCircleOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons';
-import {
-  Layout,
-  Menu,
-  Upload,
-  message,
-  Button,
-  Descriptions,
-  Row,
-  Col,
-  Divider,
-  Tag,
-  Select,
-} from 'antd';
+import { Layout, Menu, Upload, message, Button, Descriptions, Row, Col, Tag, Select } from 'antd';
 import { connect } from 'react-redux';
 import { setSiderCollapse } from 'core/redux/settings/actions';
 import { setSpatialAsset, setSelectedCog } from 'core/redux/spatial-assets/actions';
@@ -159,61 +147,59 @@ const MenuSide = (props) => {
         onCollapse={onCollapse}
       >
         <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          openKeys={openKeys}
-          onOpenChange={onOpenChange}
-          forceSubMenuRender
-        >
-          {!collapsed && (
-            <>
-              <SubMenu key="sub1">
-                {
-                  // eslint-disable-next-line
-                }
-                <Dragger {...draggerProps} fileList={fileList}>
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined />
-                  </p>
-                  <p className="ant-upload-text">Drag and drop a STAC Item to this area</p>
-                  <p className="ant-upload-hint">It will be loaded into your browser</p>
-                </Dragger>
-              </SubMenu>
-              <SubMenu key="sub2" icon={<DatabaseOutlined />} title="Loaded File Status">
-                <Row>
-                  <Col span={12} offset={3}>
-                    <Descriptions.Item>{validationTag}</Descriptions.Item>
-                  </Col>
-                </Row>
-                <Divider orientation="left" />
-                {loadedCogs && (
-                  <>
-                    <Row>
-                      <Col span={12} offset={3}>
-                        Select Raster to View:
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col span={12} offset={3}>
-                        <Select
-                          defaultValue={selectedCog}
-                          onChange={handleChange}
-                          style={{ width: '100%' }}
-                        >
-                          {rasterSelector}
-                        </Select>
-                      </Col>
-                    </Row>
-                  </>
-                )}
-              </SubMenu>
-              <SubMenu key="sub3">
-                <Button block>Register</Button>
-              </SubMenu>
-            </>
-          )}
-        </Menu>
+        {!collapsed && (
+          <Menu
+            theme="dark"
+            mode="inline"
+            openKeys={openKeys}
+            onOpenChange={onOpenChange}
+            forceSubMenuRender
+          >
+            <SubMenu key="sub1">
+              {
+                // eslint-disable-next-line
+              }
+              <Dragger {...draggerProps} fileList={fileList}>
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">Drag and drop a STAC Item to this area</p>
+                <p className="ant-upload-hint">It will be loaded into your browser</p>
+              </Dragger>
+            </SubMenu>
+            <SubMenu key="sub2" icon={<DatabaseOutlined />} title="Loaded File Status">
+              <Row>
+                <Col span={12} offset={3}>
+                  <Descriptions.Item>{validationTag}</Descriptions.Item>
+                </Col>
+              </Row>
+              <Menu.Divider orientation="left" />
+              {loadedCogs && (
+                <>
+                  <Row>
+                    <Col span={12} offset={3}>
+                      Select Raster to View:
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col span={12} offset={3}>
+                      <Select
+                        defaultValue={selectedCog}
+                        onChange={handleChange}
+                        style={{ width: '100%' }}
+                      >
+                        {rasterSelector}
+                      </Select>
+                    </Col>
+                  </Row>
+                </>
+              )}
+            </SubMenu>
+            <SubMenu key="sub3">
+              <Button block>Register</Button>
+            </SubMenu>
+          </Menu>
+        )}
       </Sider>
     </div>
   );

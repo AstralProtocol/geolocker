@@ -59,11 +59,17 @@ export default function userReducer(state = initialState, action) {
       };
       break;
 
+    case actions.SET_INITIAL_MAP_LOAD:
+      reduced = {
+        ...state,
+        ...action.payload,
+      };
+      break;
+
     case actions.SET_COLLAPSED_SIDER:
       reduced = {
         ...state,
         ...action.payload,
-        initialMapLoad: false,
       };
       break;
 
