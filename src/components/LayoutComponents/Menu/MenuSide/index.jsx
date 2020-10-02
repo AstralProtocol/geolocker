@@ -13,33 +13,39 @@ import {
   message,
   Button,
   Descriptions,
-  DatePicker,
   Row,
   Col,
   Divider,
   Tag,
+  Select,
 } from 'antd';
 import { connect } from 'react-redux';
 import { setSiderCollapse } from 'core/redux/settings/actions';
-import { setSpatialAsset } from 'core/redux/spatial-assets/actions';
-
-import moment from 'moment';
+import { setSpatialAsset, setSelectedCog } from 'core/redux/spatial-assets/actions';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 const { Dragger } = Upload;
+const { Option } = Select;
 
 const OPEN_KEYS = ['1', 'sub1', 'sub2', 'sub3'];
 
 const MenuSide = (props) => {
-  const { collapsed, dispatchSetSiderCollapse, isLoggedIn, dispatchSetSpatialAsset } = props;
-
-  const now = moment();
+  const {
+    collapsed,
+    dispatchSetSiderCollapse,
+    isLoggedIn,
+    dispatchSetSpatialAsset,
+    loadedCogs,
+    dispatchSetSelectedCog,
+    selectedCog,
+  } = props;
 
   const parentRef = useRef(null);
   const [openKeys, setOpenKeys] = useState(OPEN_KEYS);
   const [fileList, setFileList] = useState([]);
   const [validStacItem, setValidStacItem] = useState(false);
+  const [rasterSelector, setRasterSelector] = useState(null);
 
   const draggerProps = {
     accept: 'application/JSON',
@@ -102,6 +108,25 @@ const MenuSide = (props) => {
     [isLoggedIn],
   );
 
+  useEffect(() => {
+    if (loadedCogs) {
+      const newRasterSelectorOptions = [];
+      loadedCogs.forEach((cog) => {
+        newRasterSelectorOptions.push(
+          <Option value={cog} key={cog}>
+            {cog}
+          </Option>,
+        );
+      });
+
+      setRasterSelector(newRasterSelectorOptions);
+    }
+  }, [loadedCogs]);
+
+  const handleChange = (value) => {
+    dispatchSetSelectedCog(value);
+  };
+
   let validationTag;
 
   if (validStacItem && fileList.length > 0) {
@@ -162,19 +187,26 @@ const MenuSide = (props) => {
                   </Col>
                 </Row>
                 <Divider orientation="left" />
-                <Row>
-                  <Col span={20} offset={3}>
-                    geoJSON timestamp:{'    '}
-                    <DatePicker
-                      id="cT"
-                      format="YYYY-MM-DD HH:mm"
-                      showTime={{
-                        defaultValue: now,
-                        format: 'HH:mm',
-                      }}
-                    />
-                  </Col>
-                </Row>
+                {loadedCogs && (
+                  <>
+                    <Row>
+                      <Col span={12} offset={3}>
+                        Select Raster to View:
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col span={12} offset={3}>
+                        <Select
+                          defaultValue={selectedCog}
+                          onChange={handleChange}
+                          style={{ width: '100%' }}
+                        >
+                          {rasterSelector}
+                        </Select>
+                      </Col>
+                    </Row>
+                  </>
+                )}
               </SubMenu>
               <SubMenu key="sub3">
                 <Button block>Register</Button>
@@ -190,6 +222,8 @@ const MenuSide = (props) => {
 const mapStateToProps = (state) => ({
   collapsed: state.settings.collapsed,
   isLoggedIn: state.login.isLoggedIn,
+  loadedCogs: state.spatialAssets.loadedCogs,
+  selectedCog: state.spatialAssets.selectedCog,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -197,6 +231,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setSiderCollapse(collapsed, siderWidth)),
   dispatchSetSpatialAsset: (spatialAsset, spatialAssetLoaded) =>
     dispatch(setSpatialAsset(spatialAsset, spatialAssetLoaded)),
+  dispatchSetSelectedCog: (selectedCog) => dispatch(setSelectedCog(selectedCog)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuSide);

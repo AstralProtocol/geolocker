@@ -3,11 +3,22 @@ import ReactMapGL, { Source, Layer, FlyToInterpolator, WebMercatorViewport } fro
 import { connect } from 'react-redux';
 import { easeCubic } from 'd3-ease';
 import axios from 'axios';
+import { setLoadedCogs, setSelectedCog } from 'core/redux/spatial-assets/actions';
 
 const regex = /(?:\.([^.]+))?$/;
 
 const Map = (props) => {
-  const { collapsed, initialMapLoad, siderWidth, spatialAsset, spatialAssetLoaded } = props;
+  const {
+    collapsed,
+    initialMapLoad,
+    siderWidth,
+    spatialAsset,
+    spatialAssetLoaded,
+    dispatchSetLoadedCogs,
+    loadedCogs,
+    selectedCog,
+    dispatchSetSelectedCog,
+  } = props;
   const parentRef = useRef(null);
   const [viewport, setViewport] = useState({
     latitude: 30,
@@ -15,6 +26,7 @@ const Map = (props) => {
     zoom: 2,
   });
   const [loadedTileJson, setLoadedTileJson] = useState(null);
+
   const onStacDataLoad = (sAsset = null) => {
     if (sAsset) {
       const { longitude, latitude, zoom } = new WebMercatorViewport(viewport).fitBounds(
@@ -85,30 +97,38 @@ const Map = (props) => {
   });
 
   useEffect(() => {
-    async function loadSpatialAsset() {
-      if (spatialAssetLoaded && spatialAsset) {
-        const cogsUrl = Object.values(spatialAsset.assets).reduce((newData, asset) => {
-          if (regex.exec(asset.href)[1] === 'tif') {
-            newData.push(asset.href);
-          }
-          return newData;
-        }, []);
+    if (spatialAssetLoaded && spatialAsset) {
+      const cogs = Object.values(spatialAsset.assets).reduce((newData, asset) => {
+        if (regex.exec(asset.href)[1] === 'tif') {
+          newData.push(asset.href);
+        }
+        return newData;
+      }, []);
 
-        const response = await axios.get(`http://tiles.rdnt.io/tiles?url=${cogsUrl && cogsUrl[0]}`);
+      dispatchSetLoadedCogs(cogs);
+      dispatchSetSelectedCog(cogs[0]);
+    } else if (!initialMapLoad) {
+      dispatchSetLoadedCogs([]);
+      onStacDataLoad(null);
+      setLoadedTileJson(null);
+      dispatchSetSelectedCog(null);
+    }
+  }, [spatialAsset, initialMapLoad, dispatchSetLoadedCogs]);
 
+  useEffect(() => {
+    async function loadTileJson() {
+      if (loadedCogs && selectedCog) {
+        const response = await axios.get(`http://tiles.rdnt.io/tiles?url=${selectedCog}`);
         if (response.status === 200) {
           setLoadedTileJson(response.data);
           onStacDataLoad(spatialAsset);
         } else {
           setLoadedTileJson(null);
         }
-      } else if (!initialMapLoad) {
-        onStacDataLoad(null);
-        setLoadedTileJson(null);
       }
     }
-    loadSpatialAsset();
-  }, [spatialAsset, initialMapLoad]);
+    loadTileJson();
+  }, [loadedCogs, selectedCog]);
 
   const dataLayer = {
     id: 'dataLayer',
@@ -132,17 +152,14 @@ const Map = (props) => {
         onViewportChange={(vp) => setViewport(vp)}
       >
         {spatialAssetLoaded && (
-          <Source id="geojson" type="geojson" data={spatialAsset.geometry}>
-            <Layer
-              // eslint-disable-next-line
-              {...dataLayer}
-            />
-          </Source>
-        )}
-
-        {loadedTileJson && (
           <>
-            <Source id="tiffjson" type="raster" tiles={loadedTileJson.tiles}>
+            <Source id="geojson" type="geojson" data={spatialAsset.geometry}>
+              <Layer
+                // eslint-disable-next-line
+                {...dataLayer}
+              />
+            </Source>
+            <Source id="tiffjson" type="raster" tiles={loadedTileJson && loadedTileJson.tiles}>
               <Layer id="tiffjson" type="raster" />
             </Source>
           </>
@@ -158,6 +175,13 @@ const mapStateToProps = (state) => ({
   siderWidth: state.settings.siderWidth,
   spatialAsset: state.spatialAssets.spatialAsset,
   spatialAssetLoaded: state.spatialAssets.spatialAssetLoaded,
+  loadedCogs: state.spatialAssets.loadedCogs,
+  selectedCog: state.spatialAssets.selectedCog,
 });
 
-export default connect(mapStateToProps, null)(Map);
+const mapDispatchToProps = (dispatch) => ({
+  dispatchSetLoadedCogs: (loadedCogs) => dispatch(setLoadedCogs(loadedCogs)),
+  dispatchSetSelectedCog: (selectedCog) => dispatch(setSelectedCog(selectedCog)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Map);

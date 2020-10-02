@@ -91,7 +91,6 @@ function* INIT_WEB3_SAGA() {
 
   notification.info({
     message: 'You may now interact with the dApp',
-    description: 'Logging out',
     placement: 'bottomRight',
   });
 
