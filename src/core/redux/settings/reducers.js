@@ -70,6 +70,7 @@ export default function userReducer(state = initialState, action) {
       reduced = {
         ...state,
         ...action.payload,
+        initialMapLoad: false,
       };
       break;
 

@@ -4,7 +4,6 @@ import { actions } from './actions';
 
 async function fetchFromTilesRdnt(loadedCogs) {
   const responses = [];
-
   const loadedTiffJson = [];
 
   await Promise.all(
@@ -24,7 +23,10 @@ async function fetchFromTilesRdnt(loadedCogs) {
         cog: response.cog,
       });
     } else {
-      loadedTiffJson.push('error fetching resource');
+      loadedTiffJson.push({
+        status: 'error fetching resource',
+        cog: response.cog,
+      });
     }
   });
   return loadedTiffJson;

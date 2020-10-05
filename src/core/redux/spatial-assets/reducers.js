@@ -25,6 +25,13 @@ export default function spatialAssetsReducer(state = initialState, action) {
       };
       break;
 
+    case actions.UNLOAD_COGS:
+      reduced = {
+        ...state,
+        ...action.payload,
+      };
+      break;
+
     case actions.SET_SELECTED_COG:
       reduced = {
         ...state,

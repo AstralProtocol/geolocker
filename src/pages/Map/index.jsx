@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import ReactMapGL, { Source, Layer, FlyToInterpolator, WebMercatorViewport } from 'react-map-gl';
 import { connect } from 'react-redux';
 import { easeCubic } from 'd3-ease';
-import axios from 'axios';
 import { loadCogs, setSelectedCog } from 'core/redux/spatial-assets/actions';
 
 const regex = /(?:\.([^.]+))?$/;
@@ -15,7 +14,7 @@ const Map = (props) => {
     spatialAsset,
     spatialAssetLoaded,
     dispatchLoadCogs,
-    loadedCogs,
+    loadedTiffJson,
     selectedCog,
     dispatchSetSelectedCog,
   } = props;
@@ -25,7 +24,8 @@ const Map = (props) => {
     longitude: 0,
     zoom: 2,
   });
-  const [loadedTileJson, setLoadedTileJson] = useState(null);
+  const [rasterSources, setRasterSources] = useState(null);
+  const [selectedRasterSource, setSelectedRasterSource] = useState(null);
 
   const onStacDataLoad = (sAsset = null) => {
     if (sAsset) {
@@ -97,9 +97,6 @@ const Map = (props) => {
   });
 
   useEffect(() => {
-    console.log(spatialAssetLoaded);
-    console.log(spatialAsset);
-    console.log(initialMapLoad);
     if (spatialAssetLoaded && spatialAsset) {
       const cogs = Object.values(spatialAsset.assets).reduce((newData, asset) => {
         if (regex.exec(asset.href)[1] === 'tif') {
@@ -108,29 +105,42 @@ const Map = (props) => {
         return newData;
       }, []);
 
+      onStacDataLoad(spatialAsset);
+
       if (cogs) {
         dispatchLoadCogs(cogs);
         dispatchSetSelectedCog(cogs[0]);
       }
     } else if (!initialMapLoad) {
       onStacDataLoad(null);
+      setRasterSources(null);
+      setSelectedRasterSource(null);
     }
   }, [spatialAsset, initialMapLoad, dispatchLoadCogs]);
 
   useEffect(() => {
-    async function loadTileJson() {
-      if (loadedCogs && selectedCog) {
-        const response = await axios.get(`http://tiles.rdnt.io/tiles?url=${selectedCog}`);
-        if (response.status === 200) {
-          setLoadedTileJson(response.data);
-          onStacDataLoad(spatialAsset);
-        } else {
-          setLoadedTileJson(null);
-        }
-      }
+    if (loadedTiffJson) {
+      const newRasterSources = [];
+
+      loadedTiffJson.forEach((tiffJson) => {
+        newRasterSources.push(
+          <Source id={tiffJson.cog} key={tiffJson.cog} type="raster" tiles={tiffJson.tiles}>
+            <Layer id={tiffJson.cog} type="raster" />
+          </Source>,
+        );
+      });
+
+      setRasterSources(newRasterSources);
     }
-    loadTileJson();
-  }, [loadedCogs, selectedCog]);
+  }, [loadedTiffJson]);
+
+  useEffect(() => {
+    if (rasterSources && selectedCog) {
+      setSelectedRasterSource(
+        rasterSources.find((rasterSource) => rasterSource.key === selectedCog),
+      );
+    }
+  }, [rasterSources, selectedCog]);
 
   const dataLayer = {
     id: 'dataLayer',
@@ -161,9 +171,7 @@ const Map = (props) => {
                 {...dataLayer}
               />
             </Source>
-            <Source id="tiffjson" type="raster" tiles={loadedTileJson && loadedTileJson.tiles}>
-              <Layer id="tiffjson" type="raster" />
-            </Source>
+            {selectedRasterSource}
           </>
         )}
       </ReactMapGL>
@@ -177,7 +185,7 @@ const mapStateToProps = (state) => ({
   siderWidth: state.settings.siderWidth,
   spatialAsset: state.spatialAssets.spatialAsset,
   spatialAssetLoaded: state.spatialAssets.spatialAssetLoaded,
-  loadedCogs: state.spatialAssets.loadedCogs,
+  loadedTiffJson: state.spatialAssets.loadedTiffJson,
   selectedCog: state.spatialAssets.selectedCog,
 });
 

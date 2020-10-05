@@ -33,11 +33,11 @@ export const changeSetting = (setting, value) => {
   };
 };
 
-export const setInitialMapLoad = (initialMapLoaded) => {
+export const setInitialMapLoad = (initialMapLoad) => {
   return {
     type: actions.SET_INITIAL_MAP_LOAD,
     payload: {
-      initialMapLoaded,
+      initialMapLoad,
     },
   };
 };

@@ -4,24 +4,11 @@ import { withRouter } from 'react-router-dom';
 import { initWeb3 } from 'core/redux/login/actions';
 import { initializeContracts } from 'core/redux/contracts/actions';
 import { Contracts } from 'core/redux/contracts/reducers';
-import { setInitialMapLoad } from 'core/redux/settings/actions';
 // import WithMenuLayout from './WithMenu';
 import FullMapLayout from './FullMap';
 
 function MainLayout(props) {
-  const {
-    children,
-    web3,
-    initWeb3Props,
-    initializeContractsProps,
-    dispatchSetInitialMapLoaded,
-    authorized,
-  } = props;
-
-  // Connect to provider and init web3
-  useEffect(function initialMapLoad() {
-    dispatchSetInitialMapLoaded(true);
-  }, []);
+  const { children, web3, initWeb3Props, initializeContractsProps, authorized } = props;
 
   // Connect to provider and init web3
   useEffect(
@@ -54,7 +41,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchSetInitialMapLoaded: (initialMapLoaded) => dispatch(setInitialMapLoad(initialMapLoaded)),
   initWeb3Props: () => dispatch(initWeb3()),
   initializeContractsProps: (contracts, web3) => dispatch(initializeContracts(contracts, web3)),
 });

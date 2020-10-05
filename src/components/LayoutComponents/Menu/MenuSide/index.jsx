@@ -9,7 +9,7 @@ import {
 import { Layout, Menu, Upload, message, Button, Descriptions, Row, Col, Tag, Select } from 'antd';
 import { connect } from 'react-redux';
 import { setSiderCollapse } from 'core/redux/settings/actions';
-import { setSpatialAsset, setSelectedCog } from 'core/redux/spatial-assets/actions';
+import { setSpatialAsset, setSelectedCog, unloadCogs } from 'core/redux/spatial-assets/actions';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -27,6 +27,7 @@ const MenuSide = (props) => {
     loadedCogs,
     dispatchSetSelectedCog,
     selectedCog,
+    dispatchUnloadCogs,
   } = props;
 
   const parentRef = useRef(null);
@@ -67,6 +68,7 @@ const MenuSide = (props) => {
       if (newFileList !== undefined && newFileList.length === 0) {
         setValidStacItem(false);
         dispatchSetSpatialAsset({}, false);
+        dispatchUnloadCogs();
       }
 
       setFileList(newFileList);
@@ -102,12 +104,14 @@ const MenuSide = (props) => {
       loadedCogs.forEach((cog) => {
         newRasterSelectorOptions.push(
           <Option value={cog} key={cog}>
-            {cog}
+            `${cog.substr(-10)}`
           </Option>,
         );
       });
 
       setRasterSelector(newRasterSelectorOptions);
+    } else {
+      setRasterSelector(null);
     }
   }, [loadedCogs]);
 
@@ -175,24 +179,22 @@ const MenuSide = (props) => {
               </Row>
               <Menu.Divider orientation="left" />
               {loadedCogs && (
-                <>
+                <div style={{ marginTop: '25px' }}>
                   <Row>
                     <Col span={12} offset={3}>
                       Select Raster to View:
                     </Col>
                   </Row>
                   <Row>
-                    <Col span={12} offset={3}>
-                      <Select
-                        defaultValue={selectedCog}
-                        onChange={handleChange}
-                        style={{ width: '100%' }}
-                      >
-                        {rasterSelector}
-                      </Select>
-                    </Col>
+                    <Select
+                      defaultValue={selectedCog}
+                      onChange={handleChange}
+                      style={{ width: '100%', marginTop: '25px' }}
+                    >
+                      {rasterSelector}
+                    </Select>
                   </Row>
-                </>
+                </div>
               )}
             </SubMenu>
             <SubMenu key="sub3">
@@ -218,6 +220,7 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchSetSpatialAsset: (spatialAsset, spatialAssetLoaded) =>
     dispatch(setSpatialAsset(spatialAsset, spatialAssetLoaded)),
   dispatchSetSelectedCog: (selectedCog) => dispatch(setSelectedCog(selectedCog)),
+  dispatchUnloadCogs: () => dispatch(unloadCogs()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuSide);
