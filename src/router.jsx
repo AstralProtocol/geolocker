@@ -1,16 +1,8 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
-import Loadable from 'react-loadable';
-import Loader from 'components/LayoutComponents/Loader/index';
+import loadable from '@loadable/component';
 import MainLayout from 'layouts';
-
-const loadable = (loader) =>
-  Loadable({
-    loader,
-    delay: false,
-    loading: () => <Loader spinning />,
-  });
 
 const routes = [
   // Feed

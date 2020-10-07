@@ -9,7 +9,12 @@ import {
 import { Layout, Menu, Upload, message, Button, Descriptions, Row, Col, Tag, Select } from 'antd';
 import { connect } from 'react-redux';
 import { setSiderCollapse } from 'core/redux/settings/actions';
-import { setSpatialAsset, setSelectedCog, unloadCogs } from 'core/redux/spatial-assets/actions';
+import {
+  setFileList,
+  setSpatialAsset,
+  setSelectedCog,
+  unloadCogs,
+} from 'core/redux/spatial-assets/actions';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -28,11 +33,12 @@ const MenuSide = (props) => {
     dispatchSetSelectedCog,
     selectedCog,
     dispatchUnloadCogs,
+    dispatchSetFileList,
+    fileList,
   } = props;
 
   const parentRef = useRef(null);
   const [openKeys, setOpenKeys] = useState(OPEN_KEYS);
-  const [fileList, setFileList] = useState([]);
   const [validStacItem, setValidStacItem] = useState(false);
   const [rasterSelector, setRasterSelector] = useState(null);
 
@@ -71,7 +77,7 @@ const MenuSide = (props) => {
         dispatchUnloadCogs();
       }
 
-      setFileList(newFileList);
+      dispatchSetFileList(newFileList);
     },
   };
 
@@ -212,9 +218,11 @@ const mapStateToProps = (state) => ({
   isLoggedIn: state.login.isLoggedIn,
   loadedCogs: state.spatialAssets.loadedCogs,
   selectedCog: state.spatialAssets.selectedCog,
+  fileList: state.spatialAssets.fileList,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  dispatchSetFileList: (fileList) => dispatch(setFileList(fileList)),
   dispatchSetSiderCollapse: (collapsed, siderWidth) =>
     dispatch(setSiderCollapse(collapsed, siderWidth)),
   dispatchSetSpatialAsset: (spatialAsset, spatialAssetLoaded) =>

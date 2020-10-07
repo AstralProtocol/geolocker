@@ -6,11 +6,10 @@ import { useSubscription } from '@apollo/react-hooks';
 import gravatarsWithFilterSubscription from 'core/graphql/gravatarsWithFilterSubscription';
 import makeBlockie from 'ethereum-blockies-base64';
 import utils from 'utils';
-import { toggleUpdateNameModal, toggleCreateModal } from 'core/redux/modals/actions';
 import styles from './style.module.scss';
 
 function Customization(props) {
-  const { selectedAccount, dispatchToggleUpdateNameModal, dispatchToggleCreateModal } = props;
+  const { selectedAccount } = props;
 
   const { data, loading } = useSubscription(gravatarsWithFilterSubscription, {
     variables: {
@@ -62,9 +61,7 @@ function Customization(props) {
         </Col>
         <Col span={4}>
           <div className={styles.button}>
-            <Button block onClick={dispatchToggleUpdateNameModal}>
-              Update Gravatar Name
-            </Button>
+            <Button block>Update Gravatar Name</Button>
           </div>
         </Col>
       </Row>
@@ -80,7 +77,7 @@ function Customization(props) {
         <Col span={8} />
         <Col span={4}>
           <div className={styles.button}>
-            <Button type="primary" onClick={dispatchToggleCreateModal} block>
+            <Button type="primary" block>
               Create Gravatar
             </Button>
           </div>
@@ -107,9 +104,4 @@ const mapStateToProps = (state) => ({
   selectedAccount: state.login.selectedAccount,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  dispatchToggleUpdateNameModal: () => dispatch(toggleUpdateNameModal()),
-  dispatchToggleCreateModal: () => dispatch(toggleCreateModal()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Customization);
+export default connect(mapStateToProps, null)(Customization);

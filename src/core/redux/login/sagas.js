@@ -67,10 +67,8 @@ function* INIT_WEB3_SAGA() {
   });
 
   const web3Modal = yield call(getWeb3Modal);
-  console.log(web3Modal);
 
   const provider = yield call(web3Modal.connect);
-  console.log(provider);
 
   const web3 = new Web3(provider);
 

@@ -36,8 +36,6 @@ function MainLayout(props) {
 const mapStateToProps = (state) => ({
   web3: state.login.web3,
   authorized: state.login.authorized,
-  createModal: state.modals.createModal,
-  updateNameModal: state.modals.updateNameModal,
 });
 
 const mapDispatchToProps = (dispatch) => ({

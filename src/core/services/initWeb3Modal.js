@@ -17,6 +17,7 @@ const portisKey = process.env.REACT_APP_PORTIS_API_KEY;
 
 const getWeb3Modal = () => {
   return new Web3Modal({
+    theme: 'dark',
     cacheProvider: false,
     providerOptions: {
       walletconnect: {

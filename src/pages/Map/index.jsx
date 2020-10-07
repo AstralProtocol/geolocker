@@ -18,6 +18,7 @@ const Map = (props) => {
     selectedCog,
     dispatchSetSelectedCog,
   } = props;
+
   const parentRef = useRef(null);
   const [viewport, setViewport] = useState({
     latitude: 30,
@@ -116,7 +117,7 @@ const Map = (props) => {
       setRasterSources(null);
       setSelectedRasterSource(null);
     }
-  }, [spatialAsset, initialMapLoad, dispatchLoadCogs]);
+  }, [spatialAssetLoaded, spatialAsset, initialMapLoad, dispatchLoadCogs]);
 
   useEffect(() => {
     if (loadedTiffJson) {
@@ -157,7 +158,7 @@ const Map = (props) => {
       ref={parentRef}
     >
       <ReactMapGL
-        mapStyle="mapbox://styles/j-mars/ckfcepjb09bdg1aqw1novj44h"
+        mapStyle="mapbox://styles/j-mars/ckfzijcqx19ib19qvzig1latd"
         mapboxApiAccessToken={process.env.REACT_APP_MapboxAccessToken}
         // eslint-disable-next-line
         {...viewport}

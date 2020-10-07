@@ -1,6 +1,8 @@
 import store from 'store';
 import actions from './actions';
 
+const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
+
 const STORED_SETTINGS = (storedSettings) => {
   const settings = {};
   Object.keys(storedSettings).forEach((key) => {
@@ -78,6 +80,15 @@ export default function userReducer(state = initialState, action) {
       reduced = {
         ...state,
         ...action.payload,
+      };
+      break;
+
+    case LOCATION_CHANGE:
+      reduced = {
+        ...state,
+        collapsed: true,
+        initialMapLoad: true,
+        siderWidth: 0,
       };
       break;
 

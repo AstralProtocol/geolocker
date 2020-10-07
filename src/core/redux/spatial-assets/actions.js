@@ -1,9 +1,19 @@
 export const actions = {
+  SET_FILELIST: 'spatial-assets/SET_FILELIST',
   SET_SPATIAL_ASSET: 'spatial-assets/SET_SPATIAL_ASSET',
   LOAD_COGS: 'spatial-assets/LOAD_COGS',
   UNLOAD_COGS: 'spatial-assets/UNLOAD_COGS',
   COGS_LOADED: 'spatial-assets/COGS-LOADED',
   SET_SELECTED_COG: 'spatial-assets/SET_SELECTED_COG',
+};
+
+export const setFileList = (fileList) => {
+  return {
+    type: actions.SET_FILELIST,
+    payload: {
+      fileList,
+    },
+  };
 };
 
 export const setSpatialAsset = (spatialAsset, spatialAssetLoaded) => {
