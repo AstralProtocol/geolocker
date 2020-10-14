@@ -14,7 +14,9 @@ import {
   setSpatialAsset,
   setSelectedCog,
   unloadCogs,
+  registerSpatialAsset,
 } from 'core/redux/spatial-assets/actions';
+import validator from '@astraldao/stac-validator-js';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -35,6 +37,8 @@ const MenuSide = (props) => {
     dispatchUnloadCogs,
     dispatchSetFileList,
     fileList,
+    dispatchRegisterSpatialAsset,
+    spatialAssetLoaded,
   } = props;
 
   const parentRef = useRef(null);
@@ -48,8 +52,12 @@ const MenuSide = (props) => {
     multiple: false,
     beforeUpload(file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = async (e) => {
         setValidStacItem(true);
+        const json = JSON.parse(e.target.result);
+        console.log(json);
+        const result = await validator(json);
+        console.log(result);
         dispatchSetSpatialAsset(JSON.parse(e.target.result), true);
       };
       reader.readAsText(file);
@@ -123,6 +131,14 @@ const MenuSide = (props) => {
 
   const handleChange = (value) => {
     dispatchSetSelectedCog(value);
+  };
+
+  const handleRegister = () => {
+    if (spatialAssetLoaded) {
+      dispatchRegisterSpatialAsset();
+    } else {
+      message.info('No valid stac item loaded');
+    }
   };
 
   let validationTag;
@@ -204,7 +220,9 @@ const MenuSide = (props) => {
               )}
             </SubMenu>
             <SubMenu key="sub3">
-              <Button block>Register</Button>
+              <Button block onClick={() => handleRegister}>
+                Register
+              </Button>
             </SubMenu>
           </Menu>
         )}
@@ -219,6 +237,7 @@ const mapStateToProps = (state) => ({
   loadedCogs: state.spatialAssets.loadedCogs,
   selectedCog: state.spatialAssets.selectedCog,
   fileList: state.spatialAssets.fileList,
+  spatialAssetLoaded: state.spatialAssets.spatialAssetLoaded,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -229,6 +248,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setSpatialAsset(spatialAsset, spatialAssetLoaded)),
   dispatchSetSelectedCog: (selectedCog) => dispatch(setSelectedCog(selectedCog)),
   dispatchUnloadCogs: () => dispatch(unloadCogs()),
+  dispatchRegisterSpatialAsset: () => dispatch(registerSpatialAsset()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuSide);

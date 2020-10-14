@@ -5,6 +5,7 @@ export const actions = {
   UNLOAD_COGS: 'spatial-assets/UNLOAD_COGS',
   COGS_LOADED: 'spatial-assets/COGS-LOADED',
   SET_SELECTED_COG: 'spatial-assets/SET_SELECTED_COG',
+  REGISTER_SPATIAL_ASSET: 'spatial-assets/REGISTER_SPATIAL_ASSET',
 };
 
 export const setFileList = (fileList) => {
@@ -16,13 +17,9 @@ export const setFileList = (fileList) => {
   };
 };
 
-export const setSpatialAsset = (spatialAsset, spatialAssetLoaded) => {
+export const setSpatialAsset = () => {
   return {
     type: actions.SET_SPATIAL_ASSET,
-    payload: {
-      spatialAsset,
-      spatialAssetLoaded,
-    },
   };
 };
 
@@ -51,6 +48,16 @@ export const setSelectedCog = (selectedCog) => {
     type: actions.SET_SELECTED_COG,
     payload: {
       selectedCog,
+    },
+  };
+};
+
+export const registerSpatialAsset = (stacItem, address) => {
+  return {
+    type: actions.REGISTER_SPATIAL_ASSET,
+    payload: {
+      stacItem,
+      address,
     },
   };
 };
