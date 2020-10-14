@@ -1,6 +1,6 @@
 import { all, takeEvery, put, call, select } from 'redux-saga/effects';
 import axios from 'axios';
-import { AstralClient } from '@astraldao/astral-protocol-core';
+import AstralClient from '@astraldao/astral-protocol-core';
 import { actions } from './actions';
 
 const getSpatialAssetsState = (state) => state.spatialAssets;

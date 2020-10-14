@@ -220,7 +220,7 @@ const MenuSide = (props) => {
               )}
             </SubMenu>
             <SubMenu key="sub3">
-              <Button block onClick={() => handleRegister}>
+              <Button block onClick={() => handleRegister()}>
                 Register
               </Button>
             </SubMenu>

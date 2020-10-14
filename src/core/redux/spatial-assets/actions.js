@@ -17,9 +17,13 @@ export const setFileList = (fileList) => {
   };
 };
 
-export const setSpatialAsset = () => {
+export const setSpatialAsset = (spatialAsset, spatialAssetLoaded) => {
   return {
     type: actions.SET_SPATIAL_ASSET,
+    payload: {
+      spatialAsset,
+      spatialAssetLoaded,
+    },
   };
 };
 
@@ -52,12 +56,8 @@ export const setSelectedCog = (selectedCog) => {
   };
 };
 
-export const registerSpatialAsset = (stacItem, address) => {
+export const registerSpatialAsset = () => {
   return {
     type: actions.REGISTER_SPATIAL_ASSET,
-    payload: {
-      stacItem,
-      address,
-    },
   };
 };
