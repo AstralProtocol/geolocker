@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
 import { createHashHistory } from 'history';
 import contracts from 'core/redux/contracts/reducers';
-import gravatars from 'core/redux/gravatars/reducers';
 import login from 'core/redux/login/reducers';
 import menu from 'core/redux/menu/reducers';
 import settings from 'core/redux/settings/reducers';
@@ -13,7 +12,6 @@ export const history = createHashHistory();
 
 const appReducer = combineReducers({
   contracts,
-  gravatars,
   login,
   menu,
   router: connectRouter(history),

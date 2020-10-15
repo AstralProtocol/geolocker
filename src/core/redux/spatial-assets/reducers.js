@@ -9,6 +9,8 @@ const initialState = {
   loadedCogs: null,
   loadedTiffJson: [],
   selectedCog: null,
+  registeringSpatialAsset: false,
+  spatialAssetRegistered: false,
 };
 
 export default function spatialAssetsReducer(state = initialState, action) {
@@ -52,6 +54,20 @@ export default function spatialAssetsReducer(state = initialState, action) {
     case LOCATION_CHANGE:
       reduced = {
         ...initialState,
+      };
+      break;
+
+    case actions.REGISTERING_SPATIAL_ASSET:
+      reduced = {
+        ...state,
+        ...action.payload,
+      };
+      break;
+
+    case actions.SPATIAL_ASSET_REGISTERED:
+      reduced = {
+        ...state,
+        ...action.payload,
       };
       break;
 

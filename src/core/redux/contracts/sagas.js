@@ -1,8 +1,7 @@
-import { takeLatest, put, select, all } from 'redux-saga/effects';
+import { takeLatest, put, select, all, call } from 'redux-saga/effects';
 import { actions } from './actions';
 
 const getLoginState = (state) => state.login;
-const networkId = process.env.REACT_APP_NETWORK_ID;
 
 function* initializeContractsSaga(action) {
   const { contracts, web3 } = action;
@@ -15,11 +14,14 @@ function* initializeContractsSaga(action) {
       contractsInitializing: true,
     },
   });
+
+  const currentNetwork = yield call(web3.eth.net.getId);
+
   yield all(
     contracts.map((contract) => {
       const { abi, networks, deployedBytecode } = contract;
 
-      const web3Contract = new web3.eth.Contract(abi, networks[networkId].address, {
+      const web3Contract = new web3.eth.Contract(abi, networks[currentNetwork].address, {
         from: selectedAccount,
         data: deployedBytecode,
       });

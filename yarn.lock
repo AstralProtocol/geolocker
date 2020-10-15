@@ -85,10 +85,10 @@
   dependencies:
     "@apollo/client" latest
 
-"@astraldao/astral-protocol-contracts@^0.0.16":
-  version "0.0.16"
-  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-contracts/0.0.16/39dac5d1abc5c6d4c91f2daba6921b521e3fafa8b051147903dadc9adc0c2fc8#a66f5dc622d580455b1321a4e94f5a5e80adfb0b"
-  integrity sha512-ULKx3iRV0BtFUJxdDPJt70eaKoqa+0hPmon0BYwk4kRJE1M6va6Yp7fKh2x/fqhQapSsxHppcPJfCQBwfZ/v1A==
+"@astraldao/astral-protocol-contracts@^0.0.18":
+  version "0.0.18"
+  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-contracts/0.0.18/a8d733b2554ed71c83a040de7775286ee18db48f2fa62babcafc8fb0cc045205#ceae82a96f63d14d588255d6563f87f2a9fbe90c"
+  integrity sha512-h4n0Ir6gUCycFZUkJ+VL3fNnkLztNvKL/tu6wCMOqirpwJiqg7KLDhuSQXT+4cFzHyO/mmdpPTy3CarxnxwgvA==
   dependencies:
     "@openzeppelin/contracts" "^3.2.0"
     "@truffle/hdwallet-provider" "^1.1.0"
@@ -100,10 +100,10 @@
     truffle "^5.1.46"
     typescript "^4.0.3"
 
-"@astraldao/astral-protocol-core@^0.0.16":
-  version "0.0.16"
-  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-core/0.0.16/2fc7147f9e7d3cecfffabab9d023eeeac1ba6d75a88f98e2578f47cae451f9aa#fd940b54b0b7aafd8a4615c317a734265f42f783"
-  integrity sha512-8ouPPS5q6hdATC+/Ui26kbOY74atCfrpP18LSl8RKhFjL0EkHSVYj8qCt94y7KfJgmbR2k2tXpRryYbMp60jjA==
+"@astraldao/astral-protocol-core@^0.0.17":
+  version "0.0.17"
+  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-core/0.0.17/480bfeb8a7ce03a35a41fd2650f32b22e7df3828fd32d3f47e5c7e61a1a5c3d5#1baa5ff77f720554fb42a19985397f81baa0abf6"
+  integrity sha512-n5hDXBMk6Z1pzRuNFCCkbdzWFL2F7TJGLjIaCz/PGVIzqUfHb5ep6ajvRlK6GOzMfWJgggE1e6y+iuhIAS18MQ==
   dependencies:
     "@babel/core" "^7.11.6"
     "@babel/plugin-proposal-decorators" "^7.10.5"
@@ -142,10 +142,10 @@
     prettier "^2.1.1"
     reflect-metadata "^0.1.13"
 
-"@astraldao/stac-validator-js@^0.0.16":
-  version "0.0.16"
-  resolved "https://npm.pkg.github.com/download/@astraldao/stac-validator-js/0.0.16/fcdeb05992563716dcc8b134c0af287c8dc5a3e09de30483295c67fb9bbd4c25#cd5093d73e7dcd007a58de7d2d894aa9d3a96b80"
-  integrity sha512-xQwtL5fDHWsLqI/9icPPBrsv7u3IGvwokKW1qV+D6y0WYJ9GkZIyoPfQUSiReGqz3Jo4HQZEIleGpd86A+h1EA==
+"@astraldao/stac-validator-js@^0.0.17":
+  version "0.0.17"
+  resolved "https://npm.pkg.github.com/download/@astraldao/stac-validator-js/0.0.17/67f05e9437b252a6a391b0da4516d25919480c64d8518dfbd299a3113a9dc4fa#7bf21e0ce59175d8c027881d36c6daa34ab8fa3b"
+  integrity sha512-lgXgnSm5Y3jxDrKzp6cqAfj8ZdpkiVdBxIvgLb3Usfo1ocizCxkUBJOuid7zFpW3gnePGhNwIMBqEBA9jkYMfQ==
   dependencies:
     "@apidevtools/json-schema-ref-parser" "^9.0.1"
     ajv "^6.12.2"
@@ -7134,9 +7134,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.378, electron-to-chromium@^1.3.47, electron-to-chromium@^1.3.571:
-  version "1.3.579"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.579.tgz#58bf17499de6edf697e1442017d8569bce0d301a"
-  integrity sha512-9HaGm4UDxCtcmIqWWdv79pGgpRZWTqr+zg6kxp0MelSHfe1PNjrI8HXy1HgTSy4p0iQETGt8/ElqKFLW008BSA==
+  version "1.3.580"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.580.tgz#eb27873cfa012c43c53c9e9129038b8fd7cb964f"
+  integrity sha512-5flHTbRpptO6h3lQUG4zdSAxryAS3PrZOkLpLS0DL5/y2LBf+l9HJ8X6UBorNs1QRBrMR7u/QvkdK+GlekW1kQ==
 
 elliptic@6.3.3:
   version "6.3.3"
@@ -13479,9 +13479,9 @@ node-notifier@^8.0.0:
     which "^2.0.2"
 
 node-releases@^1.1.52, node-releases@^1.1.61:
-  version "1.1.61"
-  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.61.tgz#707b0fca9ce4e11783612ba4a2fcba09047af16e"
-  integrity sha512-DD5vebQLg8jLCOzwupn954fbIiZht05DAZs0k2u8NStSe6h9XdsuIQL8hSRKYiU8WUQRznmSDrKGbv3ObOmC7g==
+  version "1.1.63"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.63.tgz#db6dbb388544c31e888216304e8fd170efee3ff5"
+  integrity sha512-ukW3iCfQaoxJkSPN+iK7KznTeqDGVJatAEuXsJERYHa9tn/KaT5lBdIyxQjLEVTzSkyjJEuQ17/vaEjrOauDkg==
 
 node-sass@^4.14.1:
   version "4.14.1"
@@ -15751,9 +15751,9 @@ rc-pagination@~3.1.0:
     classnames "^2.2.1"
 
 rc-picker@~2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/rc-picker/-/rc-picker-2.3.0.tgz#574a1e00ca345cc77a2f783dd52a897ddd9245ad"
-  integrity sha512-UArXxifQqkwEvICWDe456Fx2LnCSbh3wYuEdPXSKJR3mIEjlF5qabNSEaoCykFZB3GtvDSmlsIMjXB8FMfRJ/A==
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/rc-picker/-/rc-picker-2.3.1.tgz#83e2c14b0150ef4319823b83e334b5dc4257508d"
+  integrity sha512-/DHIP7bOmTAuJIivns89Z60AWkyN3jdUEuVWrd7hZLqpLBiWe0jrG6zjr84vQoeWQUo25DeNoxp6IJSwMk3jEg==
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "^2.2.1"
@@ -15937,9 +15937,9 @@ rc-util@^5.0.0, rc-util@^5.0.1, rc-util@^5.0.5, rc-util@^5.0.6, rc-util@^5.0.7, 
     shallowequal "^1.1.0"
 
 rc-virtual-list@^3.0.1, rc-virtual-list@^3.0.3:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/rc-virtual-list/-/rc-virtual-list-3.1.1.tgz#e5e17c90b516f15d9de9bb927470f46afa6bdeab"
-  integrity sha512-hkDj4+xEdeYKe8sX7rft/rvh6uutiGHnqdn17//YhHdWoeDfP+TmGbzG2HEHrNdJIMEb/yNxu+KVEWd7JTJ9MA==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/rc-virtual-list/-/rc-virtual-list-3.2.0.tgz#21e70f42b22f510d38ceb1ba339b89b865686fcd"
+  integrity sha512-NZb+Z4tGkfrCNXprVUlLJxoRVIELwLmlY5nHwiV3pj4eA9Of8thpQwtT+AomwcZjKhC7R/EDtpk2ATMJXX5s3Q==
   dependencies:
     classnames "^2.2.6"
     rc-resize-observer "^0.2.3"

@@ -6,6 +6,9 @@ export const actions = {
   COGS_LOADED: 'spatial-assets/COGS-LOADED',
   SET_SELECTED_COG: 'spatial-assets/SET_SELECTED_COG',
   REGISTER_SPATIAL_ASSET: 'spatial-assets/REGISTER_SPATIAL_ASSET',
+  REGISTERING_SPATIAL_ASSET: 'spatial-assets/REGISTERING_SPATIAL_ASSET',
+  SPATIAL_ASSET_REGISTERED: 'spatial-assets/SPATIAL_ASSET_REGISTERED',
+  STOP_CHANNEL_FORK: 'spatial-assets/STOP_CHANNEL_FORK',
 };
 
 export const setFileList = (fileList) => {

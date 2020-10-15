@@ -1,10 +1,10 @@
 // Smart-Contracts
-import Gravity from 'abi/Gravity.json';
+import SpatialAssetRegistrar from '@astraldao/astral-protocol-contracts/build/contracts/SpatialAssetRegistrar.json';
 import generateContractsInitialState from 'core/services/contracts';
 import { actions } from './actions';
 
 // Contracts here
-export const Contracts = [Gravity];
+export const Contracts = [SpatialAssetRegistrar];
 
 const initialState = {
   ...generateContractsInitialState(Contracts),
