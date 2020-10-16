@@ -113,7 +113,7 @@ function* REGISTER_SPATIAL_ASSET_SAGA() {
     },
   });
 
-  const { SpatialAssetRegistrar } = yield select(getContractsState);
+  const { SpatialAssetsContract } = yield select(getContractsState);
   const { selectedAccount } = yield select(getLoginState);
 
   const astral = new AstralClient();
@@ -122,35 +122,30 @@ function* REGISTER_SPATIAL_ASSET_SAGA() {
   const { spatialAsset } = yield select(getSpatialAssetsState);
   console.log(spatialAsset);
 
-  /*
   const geodidid = yield call(
     astral.createGeoDID,
     spatialAsset,
     '0xcF56B3442eBC30EDe0838334419b5a80eEa45da8',
   );
 
-
   console.log(geodidid);
-  */
 
   // test hash and cid, change these
   const hash = '0x5519c53ea99f0d33f6a57941ccb197dd2bafef51a5b1786972721b2f2ea66e11';
-
-  const cid = 'ipfs:abcdefghi123456';
 
   // fork to handle channel
   yield fork(handleGeoDIDRegistration);
 
   const gasEstimate = yield call(
-    SpatialAssetRegistrar.instance.methods.register(hash, cid).estimateGas,
+    SpatialAssetsContract.instance.methods.mint(selectedAccount, hash, 1, '0x0').estimateGas,
     {
       from: selectedAccount,
     },
   );
 
   try {
-    SpatialAssetRegistrar.instance.methods
-      .register(hash, cid)
+    SpatialAssetsContract.instance.methods
+      .mint(selectedAccount, hash, 1, '0x0')
       .send({
         from: selectedAccount,
         gas: gasEstimate,

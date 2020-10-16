@@ -1,10 +1,10 @@
 // Smart-Contracts
-import SpatialAssetRegistrar from '@astraldao/astral-protocol-contracts/build/contracts/SpatialAssetRegistrar.json';
+import SpatialAssetsContract from '@astraldao/astral-protocol-contracts/build/contracts/SpatialAssets.json';
 import generateContractsInitialState from 'core/services/contracts';
 import { actions } from './actions';
 
 // Contracts here
-export const Contracts = [SpatialAssetRegistrar];
+export const Contracts = [SpatialAssetsContract];
 
 const initialState = {
   ...generateContractsInitialState(Contracts),
