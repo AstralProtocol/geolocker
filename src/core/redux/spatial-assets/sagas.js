@@ -1,13 +1,14 @@
 import { channel } from 'redux-saga';
 import { all, takeEvery, put, call, select, take, fork } from 'redux-saga/effects';
 import axios from 'axios';
-import AstralClient from '@astraldao/astral-protocol-core';
 import {
   actions as commitActions,
   commitSendSuccess,
   commitMinedSuccess,
   commitError,
 } from 'core/redux/contracts/actions';
+import AstralCore from 'core/services/AstralCore';
+import utils from 'utils';
 import { actions } from './actions';
 
 const getSpatialAssetsState = (state) => state.spatialAssets;
@@ -76,6 +77,15 @@ function* handleGeoDIDRegistration() {
       case commitActions.COMMIT_MINED_SUCCESS: {
         yield put(commitMinedSuccess(eventAction.receipt));
 
+        const geodidid = yield call(
+          AstralCore.generateGeoDID,
+          eventAction.rnd256,
+          eventAction.spatialAsset,
+          eventAction.selectedAccount,
+        );
+
+        console.log(geodidid);
+
         yield put({
           type: actions.SPATIAL_ASSET_REGISTERED,
           registeringSpatialAsset: false,
@@ -113,39 +123,27 @@ function* REGISTER_SPATIAL_ASSET_SAGA() {
     },
   });
 
-  const { SpatialAssetsContract } = yield select(getContractsState);
+  const { SpatialAssets } = yield select(getContractsState);
   const { selectedAccount } = yield select(getLoginState);
-
-  const astral = new AstralClient();
-  console.log(astral);
-
   const { spatialAsset } = yield select(getSpatialAssetsState);
-  console.log(spatialAsset);
 
-  const geodidid = yield call(
-    astral.createGeoDID,
-    spatialAsset,
-    '0xcF56B3442eBC30EDe0838334419b5a80eEa45da8',
-  );
-
-  console.log(geodidid);
-
-  // test hash and cid, change these
-  const hash = '0x5519c53ea99f0d33f6a57941ccb197dd2bafef51a5b1786972721b2f2ea66e11';
+  // generate random 256 bit long id
+  const rnd256 = yield call(utils.random256Uint);
+  console.log(rnd256);
 
   // fork to handle channel
   yield fork(handleGeoDIDRegistration);
 
   const gasEstimate = yield call(
-    SpatialAssetsContract.instance.methods.mint(selectedAccount, hash, 1, '0x0').estimateGas,
+    SpatialAssets.instance.methods.mint(selectedAccount, rnd256, 1, '0x0').estimateGas,
     {
       from: selectedAccount,
     },
   );
 
   try {
-    SpatialAssetsContract.instance.methods
-      .mint(selectedAccount, hash, 1, '0x0')
+    SpatialAssets.instance.methods
+      .mint(selectedAccount, rnd256, 1, '0x0')
       .send({
         from: selectedAccount,
         gas: gasEstimate,
@@ -159,6 +157,9 @@ function* REGISTER_SPATIAL_ASSET_SAGA() {
       .once('receipt', (receipt) => {
         geoDIDRegistrationChannel.put({
           type: commitActions.COMMIT_MINED_SUCCESS,
+          rnd256,
+          spatialAsset,
+          selectedAccount,
           receipt,
         });
       })
