@@ -94,7 +94,7 @@
     "@truffle/hdwallet-provider" "^1.1.1"
     truffle "^5.1.49"
 
-"@astraldao/astral-protocol-core@0.0.30":
+"@astraldao/astral-protocol-core@^0.0.30":
   version "0.0.30"
   resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-core/0.0.30/b6981619ac418b5cf69f09176fa888d624550579589aeb7db9516d039ae030d5#0df2bd1ca0f4e8ac3a250db44194bf8a28cb0612"
   integrity sha512-a2EryhGLKsspL1CWN92gMSyDPC8OXyQkuzqcoLXPqB6hcfWg2I5pUZY2/qfrmU9QCJ6NFYP3/99lOc2Mqgs7kQ==
