@@ -31,8 +31,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.2.2",
     "@apollo/react-hooks": "^4.0.0",
-    "@astraldao/astral-protocol-contracts": "^0.0.22",
-    "@astraldao/astral-protocol-core": "0.0.28",
+    "@astraldao/astral-protocol-contracts": "^0.0.24",
+    "@astraldao/astral-protocol-core": "0.0.29",
     "@astraldao/stac-validator-js": "^0.0.20",
     "@loadable/component": "^5.13.2",
     "@mapbox/geojsonhint": "^3.0.0",
