@@ -9,6 +9,7 @@ import {
 } from 'core/redux/contracts/actions';
 import AstralCore from 'core/services/AstralCore';
 import utils from 'utils';
+import { notification } from 'antd';
 import { actions } from './actions';
 
 const getSpatialAssetsState = (state) => state.spatialAssets;
@@ -127,52 +128,60 @@ function* REGISTER_SPATIAL_ASSET_SAGA() {
   const { selectedAccount } = yield select(getLoginState);
   const { spatialAsset } = yield select(getSpatialAssetsState);
 
-  // generate random 256 bit long id
-  const rnd256 = yield call(utils.random256Uint);
-  console.log(rnd256);
+  // generate 256 bit long id from selectedAccount and stacId
+  const geoDIDId = yield call(utils.geoDIDIdGenerator, selectedAccount, spatialAsset.id);
 
-  // fork to handle channel
-  yield fork(handleGeoDIDRegistration);
+  const idCreated = yield call(SpatialAssets.instance.methods.idStatus(geoDIDId).call);
 
-  const gasEstimate = yield call(
-    SpatialAssets.instance.methods.mint(selectedAccount, rnd256, 1, '0x0').estimateGas,
-    {
-      from: selectedAccount,
-    },
-  );
+  if (!idCreated) {
+    // fork to handle channel
+    yield fork(handleGeoDIDRegistration);
 
-  try {
-    SpatialAssets.instance.methods
-      .mint(selectedAccount, rnd256, 1, '0x0')
-      .send({
+    const gasEstimate = yield call(
+      SpatialAssets.instance.methods.mint(selectedAccount, geoDIDId, 1, '0x0').estimateGas,
+      {
         from: selectedAccount,
-        gas: gasEstimate,
-      })
-      .once('transactionHash', (tx) => {
-        geoDIDRegistrationChannel.put({
-          type: commitActions.COMMIT_SEND_SUCCESS,
-          tx,
+      },
+    );
+
+    try {
+      SpatialAssets.instance.methods
+        .mint(selectedAccount, geoDIDId, 1, '0x0')
+        .send({
+          from: selectedAccount,
+          gas: gasEstimate,
+        })
+        .once('transactionHash', (tx) => {
+          geoDIDRegistrationChannel.put({
+            type: commitActions.COMMIT_SEND_SUCCESS,
+            tx,
+          });
+        })
+        .once('receipt', (receipt) => {
+          geoDIDRegistrationChannel.put({
+            type: commitActions.COMMIT_MINED_SUCCESS,
+            geoDIDId,
+            spatialAsset,
+            selectedAccount,
+            receipt,
+          });
+        })
+        .on('error', (error) => {
+          geoDIDRegistrationChannel.put({
+            type: commitActions.COMMIT_ERROR,
+            error,
+          });
         });
-      })
-      .once('receipt', (receipt) => {
-        geoDIDRegistrationChannel.put({
-          type: commitActions.COMMIT_MINED_SUCCESS,
-          rnd256,
-          spatialAsset,
-          selectedAccount,
-          receipt,
-        });
-      })
-      .on('error', (error) => {
-        geoDIDRegistrationChannel.put({
-          type: commitActions.COMMIT_ERROR,
-          error,
-        });
-      });
-  } catch (err) {
-    const errMsg = err.toString();
-    const shortErr = errMsg.substring(0, errMsg.indexOf('.') + 1);
-    put(commitError(shortErr));
+    } catch (err) {
+      const errMsg = err.toString();
+      const shortErr = errMsg.substring(0, errMsg.indexOf('.') + 1);
+      put(commitError(shortErr));
+    }
+  } else {
+    notification.error({
+      message: 'This STAC Item already exists as a geoDID',
+      placement: 'bottomRight',
+    });
   }
 }
 

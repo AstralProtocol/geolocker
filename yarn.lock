@@ -85,19 +85,19 @@
   dependencies:
     "@apollo/client" latest
 
-"@astraldao/astral-protocol-contracts@^0.0.22":
-  version "0.0.22"
-  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-contracts/0.0.22/3291b87bbbcd2b0073ea0d587851a4b07cf5e1e84a2624167a6c3d5f9c71d252#3ac98f06b64cf8b72f188c4a82a94aed729b98ae"
-  integrity sha512-Tc2VOiez6fkTu40oC+2iBsiFyiyymeLTk2OU6FDYfOV17ABfsR4FScReMuBgPL/xFFzvdSuxd5xFpCf49b1+BA==
+"@astraldao/astral-protocol-contracts@^0.0.26":
+  version "0.0.26"
+  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-contracts/0.0.26/67f235ce36b737d2e87cd601ee66537378c765734c8bf64a3e7a4f1159882372#ba724061d6465d65c10495f855cea7a02f78e3b0"
+  integrity sha512-Pv/lHqi+JAAwApoLd7no4i7vJelodcxK27faIyylVX3yvro/AF8GmZnbB8YrJ992gDSBWCTtQlCjQSVQetJ1kQ==
   dependencies:
     "@openzeppelin/contracts" "^3.2.0"
     "@truffle/hdwallet-provider" "^1.1.1"
     truffle "^5.1.49"
 
-"@astraldao/astral-protocol-core@0.0.28":
-  version "0.0.28"
-  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-core/0.0.28/e80615f36a0124156368344ac3e47370a99c2b734ff2176cfcc469a82dac5dba#e0e8270982a98c4c5e890138e8db1eac09d4a8dd"
-  integrity sha512-QoyCgjHAFJvMgmvEk86kCHQYHXRxJD3sw4ZfFsSGcQr/YlU0JtmkE9iAltYaUtSYkbUi24MXJkP1BYRiBsBhzQ==
+"@astraldao/astral-protocol-core@0.0.30":
+  version "0.0.30"
+  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-core/0.0.30/b6981619ac418b5cf69f09176fa888d624550579589aeb7db9516d039ae030d5#0df2bd1ca0f4e8ac3a250db44194bf8a28cb0612"
+  integrity sha512-a2EryhGLKsspL1CWN92gMSyDPC8OXyQkuzqcoLXPqB6hcfWg2I5pUZY2/qfrmU9QCJ6NFYP3/99lOc2Mqgs7kQ==
   dependencies:
     "@textile/powergate-client" "^2.0.1"
     ajv "^6.12.5"
