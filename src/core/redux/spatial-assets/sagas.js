@@ -131,8 +131,8 @@ function* REGISTER_SPATIAL_ASSET_SAGA() {
   // generate 256 bit long id from selectedAccount and stacId
   const geoDIDId = yield call(utils.geoDIDIdGenerator, selectedAccount, spatialAsset.id);
 
-  const idCreated = yield call(SpatialAssets.instance.methods.idStatus, geoDIDId);
-  console.log(idCreated);
+  const idCreated = yield call(SpatialAssets.instance.methods.idStatus(geoDIDId).call);
+
   if (!idCreated) {
     // fork to handle channel
     yield fork(handleGeoDIDRegistration);
