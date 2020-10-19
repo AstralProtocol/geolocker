@@ -23,7 +23,7 @@ async function fetchFromTilesRdnt(loadedCogs) {
 
   await Promise.all(
     loadedCogs.map(async (cog) => {
-      const response = await axios.get(`http://tiles.rdnt.io/tiles?url=${cog}`);
+      const response = await axios.get(`https://tiles.rdnt.io/tiles?url=${cog}`);
       responses.push({
         ...response,
         cog,
