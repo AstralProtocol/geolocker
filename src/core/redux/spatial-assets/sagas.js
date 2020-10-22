@@ -89,8 +89,10 @@ function* handleGeoDIDRegistration() {
 
         yield put({
           type: actions.SPATIAL_ASSET_REGISTERED,
-          registeringSpatialAsset: false,
-          spatialAssetRegistered: true,
+          payload: {
+            registeringSpatialAsset: false,
+            spatialAssetRegistered: true,
+          },
         });
 
         yield put({
