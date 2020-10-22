@@ -52,6 +52,7 @@ const MenuSide = (props) => {
     dispatchRegisterSpatialAsset,
     spatialAssetLoaded,
     registeringSpatialAsset,
+    spatialAssetRegistered,
   } = props;
 
   const parentRef = useRef(null);
@@ -239,9 +240,17 @@ const MenuSide = (props) => {
               )}
             </SubMenu>
             <SubMenu key="sub3">
-              <Button block onClick={() => handleRegister()} loading={registeringSpatialAsset}>
-                Register geoNFT
-              </Button>
+              {!spatialAssetRegistered ? (
+                <Button block onClick={() => handleRegister()} loading={registeringSpatialAsset}>
+                  Register geoNFT
+                </Button>
+              ) : (
+                <Descriptions.Item>
+                  <Tag icon={<CheckCircleOutlined />} color="success">
+                    geoNFT successfuly registered
+                  </Tag>
+                </Descriptions.Item>
+              )}
             </SubMenu>
           </Menu>
         )}
@@ -258,6 +267,7 @@ const mapStateToProps = (state) => ({
   fileList: state.spatialAssets.fileList,
   spatialAssetLoaded: state.spatialAssets.spatialAssetLoaded,
   registeringSpatialAsset: state.spatialAssets.registeringSpatialAsset,
+  spatialAssetRegistered: state.spatialAssets.spatialAssetRegistered,
 });
 
 const mapDispatchToProps = (dispatch) => ({

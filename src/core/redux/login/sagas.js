@@ -66,36 +66,52 @@ function* INIT_WEB3_SAGA() {
     },
   });
 
-  const web3Modal = yield call(getWeb3Modal);
+  try {
+    const web3Modal = yield call(getWeb3Modal);
 
-  const provider = yield call(web3Modal.connect);
+    const provider = yield call(web3Modal.connect);
 
-  const web3 = new Web3(provider);
+    const web3 = new Web3(provider);
 
-  const selectedAccount = yield call(web3.eth.getCoinbase);
+    const selectedAccount = yield call(web3.eth.getCoinbase);
 
-  yield put({
-    type: actions.SET_WEB3,
-    payload: {
-      initializingWeb3: false,
-      provider,
-      web3Modal,
-      web3,
-      selectedAccount: selectedAccount.toLowerCase(),
-      end2endLoadingIndicator: false,
-      isLoggedIn: true,
-    },
-  });
+    yield put({
+      type: actions.SET_WEB3,
+      payload: {
+        initializingWeb3: false,
+        provider,
+        web3Modal,
+        web3,
+        selectedAccount: selectedAccount.toLowerCase(),
+        end2endLoadingIndicator: false,
+        isLoggedIn: true,
+      },
+    });
 
-  notification.info({
-    message: 'You may now interact with the dApp',
-    placement: 'bottomRight',
-  });
+    notification.info({
+      message: 'You may now interact with the dApp',
+      placement: 'bottomRight',
+    });
 
-  if (web3Modal.cachedProvider === 'injected') {
-    yield race({
-      task: fork(watchInjectedProviderChanges),
-      cancel: take(actions.CANCEL_WATCH_INJECTED_PROVIDER),
+    if (web3Modal.cachedProvider === 'injected') {
+      yield race({
+        task: fork(watchInjectedProviderChanges),
+        cancel: take(actions.CANCEL_WATCH_INJECTED_PROVIDER),
+      });
+    }
+  } catch (err) {
+    yield put({
+      type: actions.WEB3_ERROR,
+      payload: {
+        authorized: false,
+        initializingWeb3: false,
+        end2endLoadingIndicator: false,
+      },
+    });
+
+    notification.error({
+      message: 'Error connecting',
+      placement: 'bottomRight',
     });
   }
 }

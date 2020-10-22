@@ -182,6 +182,14 @@ function* REGISTER_SPATIAL_ASSET_SAGA() {
       message: 'This STAC Item already exists as a geoDID',
       placement: 'bottomRight',
     });
+
+    yield put({
+      type: actions.REGISTERING_SPATIAL_ASSET,
+      payload: {
+        registeringSpatialAsset: false,
+        spatialAssetRegistered: false,
+      },
+    });
   }
 }
 

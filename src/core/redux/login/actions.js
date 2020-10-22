@@ -3,6 +3,7 @@ export const actions = {
   SET_ACCOUNT: 'login/account-set',
   INIT_WEB3: 'login/init-web3',
   INITIALIZING_WEB3: 'login/initializing-web3',
+  WEB3_ERROR: 'login/web3-error',
   SET_WEB3: 'login/web3-set',
   LOGIN: 'login/LOGIN',
   LOGOUT: 'login/LOGOUT',

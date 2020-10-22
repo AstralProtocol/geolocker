@@ -36,6 +36,13 @@ export default function loginReducer(state = initialState, action) {
       };
       break;
 
+    case actions.WEB3_ERROR:
+      reduced = {
+        ...state,
+        ...action.payload,
+      };
+      break;
+
     case actions.SIGNING_OUT:
       reduced = {
         ...state,
