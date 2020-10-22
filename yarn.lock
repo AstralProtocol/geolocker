@@ -94,10 +94,10 @@
     "@truffle/hdwallet-provider" "^1.1.1"
     truffle "^5.1.49"
 
-"@astraldao/astral-protocol-core@^0.0.32":
-  version "0.0.32"
-  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-core/0.0.32/073a19f5b58ee8909895efa1314b130949e5290bb30b866b47e285657b2ffd8a#3111be5c44852394e63a357ee41429b494a25d63"
-  integrity sha512-eZ2GAFzsolr7Wxy11+SlkvCOAQATYr3B3tM5RQmAxnVSl+kx4n/0RwfbbMd4YzX7owb+KeWZpfe+/iFIPxmjDQ==
+"@astraldao/astral-protocol-core@^0.0.34":
+  version "0.0.34"
+  resolved "https://npm.pkg.github.com/download/@astraldao/astral-protocol-core/0.0.34/5870d36bcc98ecc6aaedff73f5afa33b8256016a9210bb5ee20c961a95018887#c0712c0514629c57dbb1280bef591d0faa194667"
+  integrity sha512-yk7uVQ2rzif3TbvQ789JCcwlL+vLKuW114AhObQNhoMYv5cSG++fj/8yC+e8C5Pgv0ZTfXK6Okf1R8HOAq0GQw==
   dependencies:
     "@textile/powergate-client" "^2.0.1"
     ajv "^6.12.5"
