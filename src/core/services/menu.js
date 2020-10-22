@@ -6,7 +6,7 @@ export default function getTopMenuData() {
       url: '/map',
     },
     {
-      title: 'Browser',
+      title: 'Browser (Soon)',
       key: 'browser',
       url: '/browser',
     },

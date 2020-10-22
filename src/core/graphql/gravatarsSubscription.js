@@ -1,11 +1,11 @@
 import gql from 'graphql-tag';
 
 export default gql`
-  subscription {
-    gravatars {
+  query {
+    spatialassets {
       id
       owner
-      displayName
+      active
     }
   }
 `;

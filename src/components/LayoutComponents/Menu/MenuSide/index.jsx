@@ -6,7 +6,19 @@ import {
   CloseCircleOutlined,
   ClockCircleOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu, Upload, message, Button, Descriptions, Row, Col, Tag, Select } from 'antd';
+import {
+  Layout,
+  Menu,
+  Upload,
+  message,
+  Button,
+  Descriptions,
+  Row,
+  Col,
+  Tag,
+  Select,
+  Progress,
+} from 'antd';
 import { connect } from 'react-redux';
 import { setSiderCollapse } from 'core/redux/settings/actions';
 import {
@@ -39,13 +51,14 @@ const MenuSide = (props) => {
     fileList,
     dispatchRegisterSpatialAsset,
     spatialAssetLoaded,
+    registeringSpatialAsset,
   } = props;
 
   const parentRef = useRef(null);
   const [openKeys, setOpenKeys] = useState(OPEN_KEYS);
   const [validStacItem, setValidStacItem] = useState(false);
   const [rasterSelector, setRasterSelector] = useState(null);
-
+  const [loadProgress, setLoadProgress] = useState(0);
   const draggerProps = {
     accept: 'application/JSON',
     name: 'file',
@@ -56,15 +69,18 @@ const MenuSide = (props) => {
         setValidStacItem(true);
         const json = JSON.parse(e.target.result);
         console.log(json);
+        setLoadProgress(50);
         const result = await validator(json);
         console.log(result);
         dispatchSetSpatialAsset(JSON.parse(e.target.result), true);
+        setLoadProgress(100);
       };
       reader.readAsText(file);
 
       return false;
     },
     onChange(info) {
+      setLoadProgress(0);
       const { fileList: fL } = info;
       let newFileList = fL;
       // 1. Limit the number of uploaded files
@@ -196,6 +212,9 @@ const MenuSide = (props) => {
             <SubMenu key="sub2" icon={<DatabaseOutlined />} title="Loaded File Status">
               <Row>
                 <Col span={12} offset={3}>
+                  <Descriptions.Item>
+                    <Progress percent={loadProgress} status="active" />
+                  </Descriptions.Item>
                   <Descriptions.Item>{validationTag}</Descriptions.Item>
                 </Col>
               </Row>
@@ -220,8 +239,8 @@ const MenuSide = (props) => {
               )}
             </SubMenu>
             <SubMenu key="sub3">
-              <Button block onClick={() => handleRegister()}>
-                Register
+              <Button block onClick={() => handleRegister()} loading={registeringSpatialAsset}>
+                Register geoNFT
               </Button>
             </SubMenu>
           </Menu>
@@ -238,6 +257,7 @@ const mapStateToProps = (state) => ({
   selectedCog: state.spatialAssets.selectedCog,
   fileList: state.spatialAssets.fileList,
   spatialAssetLoaded: state.spatialAssets.spatialAssetLoaded,
+  registeringSpatialAsset: state.spatialAssets.registeringSpatialAsset,
 });
 
 const mapDispatchToProps = (dispatch) => ({

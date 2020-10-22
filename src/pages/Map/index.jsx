@@ -99,12 +99,14 @@ const Map = (props) => {
 
   useEffect(() => {
     if (spatialAssetLoaded && spatialAsset) {
-      const cogs = Object.values(spatialAsset.assets).reduce((newData, asset) => {
-        if (regex.exec(asset.href)[1] === 'tif') {
-          newData.push(asset.href);
-        }
-        return newData;
-      }, []);
+      const cogs =
+        spatialAsset.assets &&
+        Object.values(spatialAsset.assets).reduce((newData, asset) => {
+          if (regex.exec(asset.href)[1] === 'tif') {
+            newData.push(asset.href);
+          }
+          return newData;
+        }, []);
 
       onStacDataLoad(spatialAsset);
 
